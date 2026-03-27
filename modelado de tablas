@@ -3,12 +3,13 @@ id
 nombre
 precio
 stock
+
 📖 receta
 id
 nombre
 descripcion
-📄 receta_detalle (CLAVE 🔥)
 
+📄 receta_detalle (CLAVE 🔥)
 👉 tabla intermedia
 
 id
@@ -18,17 +19,18 @@ cantidad
 unidad (kg, gr, unidad, etc.)
 
 💡 Esto representa:
-
 “Para esta receta necesitás X cantidad de este producto”
 
 👤 cliente
 id
 nombre
 email
+
 📦 pedido
 id
 cliente_id
 fecha
+
 📄 pedido_detalle
 id
 pedido_id
