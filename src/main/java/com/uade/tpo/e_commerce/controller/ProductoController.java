@@ -1,4 +1,4 @@
-package tpo_uade.e_commerce.controller;
+package com.uade.tpo.e_commerce.controller;
 
 import java.util.List;
 
@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import tpo_uade.e_commerce.model.Producto;
-import tpo_uade.e_commerce.service.ProductoService;
+import com.uade.tpo.e_commerce.model.Producto;
+import com.uade.tpo.e_commerce.service.ProductoService;
 
 
 

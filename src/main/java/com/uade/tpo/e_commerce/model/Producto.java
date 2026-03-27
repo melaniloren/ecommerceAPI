@@ -1,4 +1,4 @@
-package tpo_uade.e_commerce.model;
+package com.uade.tpo.e_commerce.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,27 +10,17 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "usuarios")
-
-public class Usuario {
+@Table(name = "productos")
+public class Producto {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
     private String nombre;
-
-    @Column(nullable = false)
-    private String apellido;
+    
+    private String descripcion;
 
     
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    @Column(nullable = false)
-    private String password;
-
-    private String direccion;
-
-    private String telefono;
 }

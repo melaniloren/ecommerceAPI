@@ -1,12 +1,8 @@
-package tpo_uade.e_commerce.repository;
+package com.uade.tpo.e_commerce.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import tpo_uade.e_commerce.model.Producto;
-
-
-
-
+import com.uade.tpo.e_commerce.model.Producto;
 
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
     //findAll() ya está implementado por JpaRepository, no es necesario definirlo aquí

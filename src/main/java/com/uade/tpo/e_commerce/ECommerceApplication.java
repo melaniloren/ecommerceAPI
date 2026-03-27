@@ -1,4 +1,4 @@
-package tpo_uade.e_commerce;
+package com.uade.tpo.e_commerce;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
