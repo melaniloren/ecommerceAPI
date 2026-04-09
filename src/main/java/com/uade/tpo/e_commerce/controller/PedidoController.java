@@ -22,21 +22,21 @@ public class PedidoController {
     @Autowired
     private PedidoService pedidoService;
 
-    // https://localhost:8080/api/pedido -> ejecutar este método y devolver un mensaje ejemplo
+    // https://localhost:8080/api/pedidos -> ejecutar este método y devolver un mensaje ejemplo
     @GetMapping
-    public List<Pedido> getAllUsuario() {
+    public List<Pedido> getAllPedidos() {
         return pedidoService.getAllPedidos();
     }
 
     //  http://localhost:8080/api/pedido/1 -> devuelve el pedido con id 1
     @GetMapping("/{id}")
-    public Pedido getUsuarioById(@PathVariable Long id) {
+    public Pedido getPedidoById(@PathVariable Long id) {
         return pedidoService.getPedidoById(id);
     }
 
     // del http://localhost:8080/api/pedido/1 -> elimina el pedido con id 1
     @DeleteMapping("/{id}")
-    public void deleteUsuarioById(@PathVariable Long id) {
+    public void deletePedidoById(@PathVariable Long id) {
         pedidoService.deletePedidoById(id);
     }
 
