@@ -5,6 +5,7 @@ import lombok.*;
 
 @Entity
 @Data
+@Builder
 @Table(name = "receta_detalles")
 public class RecetaDetalle {
 
