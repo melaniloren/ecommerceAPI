@@ -54,7 +54,7 @@ public class UsuarioController {
         existing.setNombre(body.getNombre());
         existing.setApellido(body.getApellido());
         existing.setEmail(body.getEmail());
-        existing.setPassword(body.getPassword());
+        existing.setContrasenia(body.getContrasenia());
         existing.setDireccion(body.getDireccion());
         existing.setTelefono(body.getTelefono());
         Usuario updated = usuarioService.saveUsuario(existing);

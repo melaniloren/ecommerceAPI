@@ -14,12 +14,12 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "productos")
-public class Producto {
+@Table(name = "ingredientes")
+public class Ingrediente {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_Producto;
+    private Long id_Ingrediente;
 
     @Column(nullable = false)
     private String nombre;

@@ -16,13 +16,13 @@ public class RecetaDetalle {
 
     private String unidad;
 
-    //esta relacion es muchos a muchos pq es la intermediaria entre receta y producto
+    //esta relacion es muchos a muchos pq es la intermediaria entre receta y ingrediente
     @ManyToOne
     @JoinColumn(name = "receta_id")
     private Receta receta;
 
     @ManyToOne
-    @JoinColumn(name = "producto_id")
-    private Producto producto;
+    @JoinColumn(name = "ingrediente_id")
+    private Ingrediente ingrediente;
 
 }
