@@ -11,8 +11,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.Builder;
 
 @Data
+@Builder
 @Entity
 @Table(name = "ingredientes")
 public class Ingrediente {
