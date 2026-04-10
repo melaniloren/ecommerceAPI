@@ -3,6 +3,7 @@ package com.uade.tpo.e_commerce.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uade.tpo.e_commerce.dto.IngredienteDTO;
 import com.uade.tpo.e_commerce.model.Ingrediente;
 import com.uade.tpo.e_commerce.service.IngredienteService;
 
@@ -32,9 +34,8 @@ public class IngredienteController {
         return ingredienteService.getAllIngredientes();
     }
 
- 
     @GetMapping("/{id}")
-    public Ingrediente getIngredienteById(@PathVariable Long id) {
+    public IngredienteDTO getIngredienteById(@PathVariable Long id) {
         return ingredienteService.getIngredienteById(id);
     }
  
@@ -46,18 +47,19 @@ public class IngredienteController {
 
     // para crear un nuevo ingrediente, se envía un JSON con los datos del ingrediente al endpoint http://localhost:8080/api/ingredientes con el método POST
     @PostMapping
-    public ResponseEntity<Ingrediente> createIngrediente(@RequestBody Ingrediente ingrediente) {
-        Ingrediente created = ingredienteService.saveIngrediente(ingrediente);
-        return ResponseEntity.status(201).body(created);
+    public ResponseEntity<IngredienteDTO> createIngrediente(@RequestBody IngredienteDTO ingredienteDTO) {
+        IngredienteDTO created = ingredienteService.saveIngrediente(ingredienteDTO);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
+
 
     //para actualizar un ingrediente, se envía un JSON con los datos actualizados al endpoint http://localhost:8080/api/ingredientes/{id} con el método PUT
      @PutMapping("/{id}")
-    public ResponseEntity<Ingrediente> updateIngrediente(@PathVariable Long id, @RequestBody Ingrediente body) {
-        Ingrediente existing = ingredienteService.getIngredienteById(id);
+    public ResponseEntity<IngredienteDTO> updateIngrediente(@PathVariable Long id, @RequestBody IngredienteDTO ingredienteDTO) {
+        IngredienteDTO existing = ingredienteService.getIngredienteById(id);
         if (existing == null) return ResponseEntity.notFound().build();
-        existing.setNombre(body.getNombre());
-        existing.setDescripcion(body.getDescripcion());
+        existing.setNombre(ingredienteDTO.getNombre());
+        existing.setDescripcion(ingredienteDTO.getDescripcion());
         return ResponseEntity.ok(ingredienteService.saveIngrediente(existing));
     }
 

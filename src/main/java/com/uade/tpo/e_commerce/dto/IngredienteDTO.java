@@ -9,7 +9,7 @@ public class IngredienteDTO {
     private String descripcion;
     
 
-    public IngredienteDTO(Long id, String nombre, String descripcion, Double precio) {
+    public IngredienteDTO(Long id, String nombre, String descripcion) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
