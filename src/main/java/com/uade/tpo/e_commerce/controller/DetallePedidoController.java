@@ -30,13 +30,13 @@ public class DetallePedidoController {
 
  
     @GetMapping("/{id}")
-    public DetallePedido getProductoById(@PathVariable Long id) {
+    public DetallePedido getDetallePedidoById(@PathVariable Long id) {
         return detallePedidoService.getDetallePedidoById(id);
     }
  
 
     @DeleteMapping("/{id}")
-    public void deletePDetallePedidoById(@PathVariable Long id) {
+    public void deleteDetallePedidoById(@PathVariable Long id) {
         detallePedidoService.deleteDetallePedidoById(id);
     }
 
