@@ -6,6 +6,7 @@ import java.util.List;
 
 @Entity
 @Data
+@Builder
 @Table(name = "recetas")
 public class Receta {
 
