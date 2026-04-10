@@ -30,7 +30,7 @@ public class IngredienteController {
 
     // https://localhost:8080/api/ingredientes -> ejecutar este método y devolver un mensaje ejemplo
     @GetMapping
-    public List<Ingrediente> getAllListaIngredientes() {
+    public List<IngredienteDTO> getAllListaIngredientes() {
         return ingredienteService.getAllIngredientes();
     }
 
