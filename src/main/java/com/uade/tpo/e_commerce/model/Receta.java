@@ -17,6 +17,8 @@ public class Receta {
 
     private String descripcion;
 
+    private Double precioReceta;
+
     @OneToMany(mappedBy = "receta", cascade = CascadeType.ALL)
     private List<RecetaDetalle> recetaDetalles;
 

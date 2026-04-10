@@ -15,7 +15,7 @@ public class DetallePedido {
 
     private Integer cantidad;
 
-    private Double precio;
+    private Double precioTotal;
 
     @ManyToOne
     @JoinColumn(name = "pedido_id")

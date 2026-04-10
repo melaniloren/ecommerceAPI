@@ -26,7 +26,7 @@ public class Ingrediente {
     
     private String descripcion;
 
-    @OneToMany(mappedBy = "receta", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "ingrediente", cascade = CascadeType.ALL)
     private List<RecetaDetalle> recetaDetalles;
 
     
