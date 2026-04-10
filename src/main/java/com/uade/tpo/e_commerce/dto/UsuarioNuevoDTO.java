@@ -9,7 +9,6 @@ public class UsuarioNuevoDTO {
     private String email;
     private String contrasenia;
 
-
     public UsuarioNuevoDTO(String nombre, String apellido, String email, String contrasenia) {
         this.nombre = nombre;
         this.apellido = apellido;
