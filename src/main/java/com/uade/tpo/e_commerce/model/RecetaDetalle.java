@@ -16,6 +16,7 @@ public class RecetaDetalle {
 
     private String unidad;
 
+    //esta relacion es muchos a muchos pq es la intermediaria entre receta y producto
     @ManyToOne
     @JoinColumn(name = "receta_id")
     private Receta receta;
