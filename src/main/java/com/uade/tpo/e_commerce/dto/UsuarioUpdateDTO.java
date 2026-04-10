@@ -3,14 +3,12 @@ package com.uade.tpo.e_commerce.dto;
 import lombok.Data;
 
 @Data
-public class UsuarioDTO {
-    private Long idUsuario;
+public class UsuarioUpdateDTO {
     private String nombre;
     private String apellido;
     private String email;
 
-    public UsuarioDTO(Long id, String nombre, String apellido, String email) {
-        this.idUsuario = id;
+    public UsuarioUpdateDTO(String nombre, String apellido, String email) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.email = email;

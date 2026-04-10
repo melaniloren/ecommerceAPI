@@ -2,7 +2,11 @@ package com.uade.tpo.e_commerce.controller;
 
 import java.util.List;
 
+import com.uade.tpo.e_commerce.dto.UsuarioDTO;
+import com.uade.tpo.e_commerce.dto.UsuarioNuevoDTO;
+import com.uade.tpo.e_commerce.dto.UsuarioUpdateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,7 +35,7 @@ public class UsuarioController {
 
     //  http://localhost:8080/api/usuarios/1 -> devuelve el usuario con id 1
     @GetMapping("/{id}")
-    public Usuario getUsuarioById(@PathVariable Long id) {
+    public UsuarioDTO getUsuarioById(@PathVariable Long id) {
         return usuarioService.getUsuarioById(id);
     }
 
@@ -42,23 +46,15 @@ public class UsuarioController {
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> createUsuario(@RequestBody Usuario usuario) {
-        Usuario created = usuarioService.saveUsuario(usuario);
-        return ResponseEntity.status(201).body(created);
+    public ResponseEntity<UsuarioDTO> createUsuario(@RequestBody UsuarioNuevoDTO usuarioDTO) {
+        UsuarioDTO created = usuarioService.createUsuario(usuarioDTO);
+        return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<Usuario> updateUsuario(@PathVariable Long id, @RequestBody Usuario body) {
-        Usuario existing = usuarioService.getUsuarioById(id);
-        if (existing == null) return ResponseEntity.notFound().build();
-        existing.setNombre(body.getNombre());
-        existing.setApellido(body.getApellido());
-        existing.setEmail(body.getEmail());
-        existing.setContrasenia(body.getContrasenia());
-        existing.setDireccion(body.getDireccion());
-        existing.setTelefono(body.getTelefono());
-        Usuario updated = usuarioService.saveUsuario(existing);
-        return ResponseEntity.ok(updated);
+    public ResponseEntity<UsuarioDTO> updateUsuario(@PathVariable Long id, @RequestBody UsuarioUpdateDTO usuarioUpdateDTO) {
+        UsuarioDTO usuarioActualizado = usuarioService.updateUsuario(id, usuarioUpdateDTO);
+        return new ResponseEntity<>(usuarioActualizado, HttpStatus.OK);
     }
     
     
