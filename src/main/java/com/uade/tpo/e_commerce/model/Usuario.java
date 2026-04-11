@@ -12,14 +12,17 @@ import lombok.*;
 public class Usuario  {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_Usuario;
+    @Column(name = "id_usuario")
+    private Long idUsuario;
+
+    @Enumerated(EnumType.STRING)
+    private Rol rol;
 
     @Column(nullable = false)
     private String nombre;
 
     @Column(nullable = false)
     private String apellido;
-
     
     @Column(nullable = false, unique = true)
     private String email;

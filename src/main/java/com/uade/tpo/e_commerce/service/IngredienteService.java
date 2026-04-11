@@ -23,7 +23,7 @@ public class IngredienteService {
     public List<IngredienteDTO> getAllIngredientes() {
         return ingredienteRepository.findAll()
                 .stream()
-                .map(i -> new IngredienteDTO(i.getId_Ingrediente(), i.getNombre(), i.getDescripcion()))
+                .map(i -> new IngredienteDTO(i.getIdIngrediente(), i.getNombre(), i.getDescripcion()))
                 .collect(Collectors.toList());
     }
 
@@ -31,11 +31,12 @@ public class IngredienteService {
         Ingrediente ingrediente = ingredienteRepository.findById(id).orElse(null);
 
         if (ingrediente == null) {
-            // throw new RecetaNotFoundException("Ingrediente no encontrado con id: " + id); //hacer las excepciones mas generalizadas
+            throw new RuntimeException("Ingrediente no encontrado con id: " + id);
+            // TODO: hacer las excepciones mas generalizadas
         }
 
         return new IngredienteDTO(
-                ingrediente.getId_Ingrediente(),
+                ingrediente.getIdIngrediente(),
                 ingrediente.getNombre(),
                 ingrediente.getDescripcion()
         );
@@ -55,7 +56,7 @@ public class IngredienteService {
         Ingrediente ingredienteGuardado = ingredienteRepository.save(ingrediente);
 
         return new IngredienteDTO(
-                ingredienteGuardado.getId_Ingrediente(),
+                ingredienteGuardado.getIdIngrediente(),
                 ingredienteGuardado.getNombre(),
                 ingredienteGuardado.getDescripcion()
         );
@@ -65,7 +66,8 @@ public class IngredienteService {
         Ingrediente ingrediente = ingredienteRepository.findById(id).orElse(null);
 
         if (ingrediente == null) {
-           // throw new IngredienteNotFoundException("Ingrediente no encontrado con id: " + id);
+           throw new RuntimeException("Ingrediente no encontrado con id: " + id);
+           // TODO: mejorar excepciones
         }
 
         ingrediente.setNombre(ingredienteDTO.getNombre());
@@ -73,7 +75,7 @@ public class IngredienteService {
         Ingrediente actualizado = ingredienteRepository.save(ingrediente);
 
         return new IngredienteDTO(
-                actualizado.getId_Ingrediente(),
+                actualizado.getIdIngrediente(),
                 actualizado.getNombre(),
                 actualizado.getDescripcion()
         );

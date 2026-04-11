@@ -33,7 +33,7 @@ public class UsuarioService {
         if (usuario == null) {
             throw new UsuarioNotFoundException(id);
         }
-        return new UsuarioDTO(usuario.getId_Usuario(), usuario.getNombre(), usuario.getApellido(), usuario.getEmail());
+        return new UsuarioDTO(usuario.getIdUsuario(), usuario.getNombre(), usuario.getApellido(), usuario.getEmail());
     }
 
     public UsuarioDTO createUsuario(UsuarioNuevoDTO usuarioNuevoDTO) {
@@ -60,7 +60,7 @@ public class UsuarioService {
                 build();
 
         Usuario nuevoUsuario = usuarioRepository.save(usuario);
-        return new UsuarioDTO(nuevoUsuario.getId_Usuario(), nuevoUsuario.getNombre(), nuevoUsuario.getApellido(), nuevoUsuario.getEmail());
+        return new UsuarioDTO(nuevoUsuario.getIdUsuario(), nuevoUsuario.getNombre(), nuevoUsuario.getApellido(), nuevoUsuario.getEmail());
     }
 
     public UsuarioDTO updateUsuario(Long id, UsuarioUpdateDTO usuarioUpdateDTO) {
@@ -80,7 +80,7 @@ public class UsuarioService {
         usuario.setNombre(usuarioUpdateDTO.getNombre());
         usuario.setApellido(usuarioUpdateDTO.getApellido());
         usuario.setEmail(usuarioUpdateDTO.getEmail());
-        return new UsuarioDTO(usuario.getId_Usuario(), usuario.getNombre(), usuario.getApellido(), usuario.getEmail());
+        return new UsuarioDTO(usuario.getIdUsuario(), usuario.getNombre(), usuario.getApellido(), usuario.getEmail());
     }
     
 }
