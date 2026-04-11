@@ -3,20 +3,15 @@ package com.uade.tpo.e_commerce.model;
 import java.time.LocalDate;
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import lombok.Builder;
-import lombok.Data;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Data
 @Builder
 @Entity
 @Table(name = "pedidos")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Pedido {
     
    

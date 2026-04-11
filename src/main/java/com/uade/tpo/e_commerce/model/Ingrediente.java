@@ -2,21 +2,15 @@ package com.uade.tpo.e_commerce.model;
 
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import lombok.Data;
-import lombok.Builder;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Data
 @Builder
 @Entity
 @Table(name = "ingredientes")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Ingrediente {
     
     @Id

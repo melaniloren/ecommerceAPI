@@ -2,11 +2,11 @@ package com.uade.tpo.e_commerce.controller;
 
 import java.util.List;
 
+import com.uade.tpo.e_commerce.dto.RecetaDetalleDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.uade.tpo.e_commerce.model.RecetaDetalle;
 import com.uade.tpo.e_commerce.service.RecetaDetalleService;
 
 @RestController
@@ -17,20 +17,20 @@ public class RecetaDetalleController {
     private RecetaDetalleService recetaDetalleService;
 
     @GetMapping
-    public List<RecetaDetalle> getAllRecetaDetalles() {
+    public List<RecetaDetalleDTO> getAllRecetaDetalles() {
         return recetaDetalleService.getAllRecetaDetalles();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RecetaDetalle> getRecetaDetalleById(@PathVariable Long id) {
-        RecetaDetalle detalle = recetaDetalleService.getRecetaDetalleById(id);
+    public ResponseEntity<RecetaDetalleDTO> getRecetaDetalleById(@PathVariable Long id) {
+        RecetaDetalleDTO detalle = recetaDetalleService.getRecetaDetalleById(id);
         if (detalle == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(detalle);
     }
 
     @PostMapping
-    public ResponseEntity<RecetaDetalle> createRecetaDetalle(@RequestBody RecetaDetalle recetaDetalle) {
-        RecetaDetalle created = recetaDetalleService.saveRecetaDetalle(recetaDetalle);
+    public ResponseEntity<RecetaDetalleDTO> createRecetaDetalle(@RequestBody RecetaDetalleDTO recetaDetalle) {
+        RecetaDetalleDTO created = recetaDetalleService.saveRecetaDetalle(recetaDetalle);
         return ResponseEntity.status(201).body(created);
     }
 
