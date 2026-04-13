@@ -2,6 +2,8 @@ package com.uade.tpo.e_commerce.controller;
 
 import java.util.List;
 
+import com.uade.tpo.e_commerce.dto.IngredienteStockDTO;
+import com.uade.tpo.e_commerce.dto.IngredienteSaveDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.tpo.e_commerce.dto.IngredienteDTO;
-import com.uade.tpo.e_commerce.model.Ingrediente;
 import com.uade.tpo.e_commerce.service.IngredienteService;
 
 
@@ -47,23 +48,27 @@ public class IngredienteController {
 
     // para crear un nuevo ingrediente, se envía un JSON con los datos del ingrediente al endpoint http://localhost:8080/api/ingredientes con el método POST
     @PostMapping
-    public ResponseEntity<IngredienteDTO> createIngrediente(@RequestBody IngredienteDTO ingredienteDTO) {
-        IngredienteDTO created = ingredienteService.saveIngrediente(ingredienteDTO);
+    public ResponseEntity<IngredienteDTO> createIngrediente(@RequestBody IngredienteSaveDTO dto) {
+        IngredienteDTO created = ingredienteService.createIngrediente(dto);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
 
     //para actualizar un ingrediente, se envía un JSON con los datos actualizados al endpoint http://localhost:8080/api/ingredientes/{id} con el método PUT
-     @PutMapping("/{id}")
-    public ResponseEntity<IngredienteDTO> updateIngrediente(@PathVariable Long id, @RequestBody IngredienteDTO ingredienteDTO) {
+    @PutMapping("/{id}")
+    public ResponseEntity<IngredienteDTO> updateIngrediente(@PathVariable Long id, @RequestBody IngredienteSaveDTO dto) {
         IngredienteDTO existing = ingredienteService.getIngredienteById(id);
         if (existing == null) return ResponseEntity.notFound().build();
-        existing.setNombre(ingredienteDTO.getNombre());
-        existing.setDescripcion(ingredienteDTO.getDescripcion());
-        return ResponseEntity.ok(ingredienteService.saveIngrediente(existing));
+        return ResponseEntity.ok(ingredienteService.updateIngrediente(id, dto));
     }
 
-
+    @PutMapping("/{id}/stock")
+    public ResponseEntity<IngredienteDTO> updateStock(@PathVariable Long id, @RequestBody IngredienteStockDTO stockDTO) {
+        // TODO: verificar que, si el ingrediente no existe, el dto sea null, o modificar la lógica
+        IngredienteDTO ingrediente = ingredienteService.getIngredienteById(id);
+        if (ingrediente == null) return ResponseEntity.notFound().build();
+        return ResponseEntity.ok(ingredienteService.updateStock(id, stockDTO.getStock()));
+    }
 }
 
 
