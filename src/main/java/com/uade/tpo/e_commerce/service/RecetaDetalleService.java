@@ -24,7 +24,7 @@ public class RecetaDetalleService {
         return recetaDetalleRepository.findAll()
                 .stream()
                 .map(r -> new RecetaDetalleDTO(
-                        r.getId_RecetaDetalle(),
+                        r.getIdRecetaDetalle(),
                         r.getCantidad(),
                         r.getUnidad()
                 ))
@@ -39,7 +39,7 @@ public class RecetaDetalleService {
         }
 
         return new RecetaDetalleDTO(
-                recetaDetalle.getId_RecetaDetalle(),
+                recetaDetalle.getIdRecetaDetalle(),
                 recetaDetalle.getCantidad(),
                 recetaDetalle.getUnidad()
         );
@@ -60,7 +60,7 @@ public class RecetaDetalleService {
         RecetaDetalle guardado = recetaDetalleRepository.save(recetaDetalle);
 
         return new RecetaDetalleDTO(
-                guardado.getId_RecetaDetalle(),
+                guardado.getIdRecetaDetalle(),
                 guardado.getCantidad(),
                 guardado.getUnidad()
         );
@@ -83,7 +83,7 @@ public class RecetaDetalleService {
         RecetaDetalle actualizado = recetaDetalleRepository.save(recetaDetalle);
 
         return new RecetaDetalleDTO(
-                actualizado.getId_RecetaDetalle(),
+                actualizado.getIdRecetaDetalle(),
                 actualizado.getCantidad(),
                 actualizado.getUnidad()
         );

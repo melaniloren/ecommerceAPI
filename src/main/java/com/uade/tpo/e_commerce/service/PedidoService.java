@@ -23,7 +23,7 @@ public class PedidoService {
         return pedidoRepository.findAll()
                 .stream()
                 .map(pedido -> new PedidoDTO(
-                        pedido.getId_Pedido(),
+                        pedido.getIdPedido(),
                         pedido.getFecha(),
                         pedido.getTotal()))
                 .collect(Collectors.toList());
@@ -37,7 +37,7 @@ public class PedidoService {
         }
 
         PedidoDTO pedidoDTO = new PedidoDTO(
-                pedido.getId_Pedido(),
+                pedido.getIdPedido(),
                 pedido.getFecha(),
                 pedido.getTotal());
 
@@ -58,7 +58,7 @@ public class PedidoService {
         Pedido pedidoAdd = pedidoRepository.save(pedido);
 
         PedidoDTO pedidoDTOAdd = new PedidoDTO(
-                pedidoAdd.getId_Pedido(),
+                pedidoAdd.getIdPedido(),
                 pedidoAdd.getFecha(),
                 pedidoAdd.getTotal());
 
@@ -79,7 +79,7 @@ public class PedidoService {
         Pedido pedidoActualizado = pedidoRepository.save(pedido);
 
         PedidoDTO pedidoDTOActualizado = new PedidoDTO(
-                pedidoActualizado.getId_Pedido(),
+                pedidoActualizado.getIdPedido(),
                 pedidoActualizado.getFecha(),
                 pedidoActualizado.getTotal());
 

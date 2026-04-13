@@ -13,7 +13,8 @@ public class RecetaDetalle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_RecetaDetalle;
+    @Column(name = "id_receta_detalle", nullable = false)
+    private Long idRecetaDetalle;
 
     private Integer cantidad;
 

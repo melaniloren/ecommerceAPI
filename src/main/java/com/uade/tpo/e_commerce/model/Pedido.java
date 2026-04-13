@@ -13,11 +13,11 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Pedido {
-    
-   
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_Pedido;
+    @Column(name = "id_pedido", nullable = false)
+    private Long idPedido;
 
     private LocalDate fecha;
 
