@@ -1,12 +1,20 @@
 package com.uade.tpo.e_commerce.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.*;
 
 
 @Entity
-@Builder
 @Data
+@Builder
+@Getter
+@Setter
 @Table(name = "detalle_pedidos")
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,8 +22,7 @@ public class DetallePedido {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_detalle_pedido", nullable = false)
-    private Long idDetallePedido;
+    private Long id_DetallePedido;
 
     private Integer cantidad;
 
