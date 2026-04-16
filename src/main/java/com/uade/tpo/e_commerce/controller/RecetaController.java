@@ -2,7 +2,7 @@ package com.uade.tpo.e_commerce.controller;
 
 import java.util.List;
 
-import com.uade.tpo.e_commerce.dto.RecetaNuevaDTO;
+import com.uade.tpo.e_commerce.dto.RecetaRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,12 +28,12 @@ public class RecetaController {
     }
 
     @PostMapping
-    public ResponseEntity<RecetaDTO> createReceta(@RequestBody RecetaNuevaDTO dto) {
+    public ResponseEntity<RecetaDTO> createReceta(@RequestBody RecetaRequestDTO dto) {
         return ResponseEntity.status(201).body(recetaService.saveReceta(dto));
     }
 
     @PutMapping("/{id}")
-    public RecetaDTO updateReceta(@PathVariable Long id, @RequestBody RecetaDTO dto) {
+    public RecetaDTO updateReceta(@PathVariable Long id, @RequestBody RecetaRequestDTO dto) {
         return recetaService.updateReceta(id, dto);
     }
 
