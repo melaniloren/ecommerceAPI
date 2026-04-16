@@ -36,4 +36,5 @@ public class Receta {
             inverseJoinColumns = @JoinColumn(name = "categoria_id")
     )
     private List<Categoria> categorias;
+
 }

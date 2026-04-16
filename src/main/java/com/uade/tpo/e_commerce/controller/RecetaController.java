@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.uade.tpo.e_commerce.model.Receta;
+import com.uade.tpo.e_commerce.dto.RecetaDTO;
 import com.uade.tpo.e_commerce.service.RecetaService;
 
 @RestController
@@ -17,30 +17,23 @@ public class RecetaController {
     private RecetaService recetaService;
 
     @GetMapping
-    public List<Receta> getAllRecetas() {
+    public List<RecetaDTO> getAllRecetas() {
         return recetaService.getAllRecetas();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Receta> getRecetaById(@PathVariable Long id) {
-        Receta receta = recetaService.getRecetaById(id);
-        if (receta == null) return ResponseEntity.notFound().build();
-        return ResponseEntity.ok(receta);
+    public RecetaDTO getRecetaById(@PathVariable Long id) {
+        return recetaService.getRecetaById(id);
     }
 
     @PostMapping
-    public ResponseEntity<Receta> createReceta(@RequestBody Receta receta) {
-        Receta created = recetaService.saveReceta(receta);
-        return ResponseEntity.status(201).body(created);
+    public ResponseEntity<RecetaDTO> createReceta(@RequestBody RecetaDTO dto) {
+        return ResponseEntity.status(201).body(recetaService.saveReceta(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Receta> updateReceta(@PathVariable Long id, @RequestBody Receta body) {
-        Receta existing = recetaService.getRecetaById(id);
-        if (existing == null) return ResponseEntity.notFound().build();
-        existing.setNombre(body.getNombre());
-        existing.setDescripcion(body.getDescripcion());
-        return ResponseEntity.ok(recetaService.saveReceta(existing));
+    public RecetaDTO updateReceta(@PathVariable Long id, @RequestBody RecetaDTO dto) {
+        return recetaService.updateReceta(id, dto);
     }
 
     @DeleteMapping("/{id}")
