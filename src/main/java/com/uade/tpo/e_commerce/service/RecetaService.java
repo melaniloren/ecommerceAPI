@@ -2,6 +2,7 @@ package com.uade.tpo.e_commerce.service;
 
 import java.util.List;
 
+import com.uade.tpo.e_commerce.dto.RecetaRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,17 +35,18 @@ public class RecetaService {
     }
 
     @Transactional
-    public RecetaDTO saveReceta(RecetaDTO dto) {
+    public RecetaDTO saveReceta(RecetaRequestDTO dto) {
         Receta receta = toEntity(dto);
         return toDTO(recetaRepository.save(receta));
     }
 
     @Transactional
-    public RecetaDTO updateReceta(Long id, RecetaDTO dto) {
+    public RecetaDTO updateReceta(Long id, RecetaRequestDTO dto) {
         Receta existing = recetaRepository.findById(id)
                 .orElseThrow(() -> new RecetaNotFoundException(id));
         existing.setNombre(dto.getNombre());
         existing.setDescripcion(dto.getDescripcion());
+        existing.setPrecioReceta(dto.getPrecio());
         return toDTO(recetaRepository.save(existing));
     }
 
@@ -56,8 +58,8 @@ public class RecetaService {
         recetaRepository.deleteById(id);
     }
 
-private RecetaDTO toDTO(Receta receta) {
-    return new RecetaDTO(
+    private RecetaDTO toDTO(Receta receta) {
+        return new RecetaDTO(
             receta.getIdReceta(),
             receta.getNombre(),
             receta.getDescripcion(),
@@ -65,10 +67,12 @@ private RecetaDTO toDTO(Receta receta) {
     );
 }
 
-    private Receta toEntity(RecetaDTO dto) {
-        Receta receta = new Receta();
-        receta.setNombre(dto.getNombre());
-        receta.setDescripcion(dto.getDescripcion());
-        return receta;
+    private Receta toEntity(RecetaRequestDTO dto) {
+        return Receta.builder().
+                nombre(dto.getNombre()).
+                descripcion(dto.getDescripcion()).
+                precioReceta(dto.getPrecio()).
+                build();
     }
+
 }
