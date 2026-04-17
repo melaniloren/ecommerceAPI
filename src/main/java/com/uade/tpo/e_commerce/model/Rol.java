@@ -6,8 +6,7 @@ package com.uade.tpo.e_commerce.model;
  * VENDEDOR: puede publicar productos para vender.
  * COMPRADOR: puede comprar productos.
  */
-enum Rol {
+public enum Rol {
     ADMIN,
-    VENDEDOR,
-    COMPRADOR
+    USUARIO
 }
