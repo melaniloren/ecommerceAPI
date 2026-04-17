@@ -1,6 +1,7 @@
 package com.uade.tpo.e_commerce.config;
 
 
+import com.uade.tpo.e_commerce.exception.EmailNotFoundException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -9,11 +10,10 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+//import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.uade.tpo.e_commerce.model.Rol;
 import com.uade.tpo.e_commerce.repository.UsuarioRepository;
@@ -25,24 +25,20 @@ import lombok.RequiredArgsConstructor;
 @Configuration
 // Habilita la seguridad web de Spring Security
 @EnableWebSecurity
-
 // Esto no es Spring Security: Genera un constructor con los campos final requeridos lombok 
 @RequiredArgsConstructor
 public class SecurityConfig {
-
-
+    
     private final JwtFilter jwtFilter;
-    // Inyección del repositorio de usuarios
-    // pueden utilizar también @Autowired
+
     private final UsuarioRepository usuarioRepository;
 
     // Cargar los datos del usuario desde tu sistema a través de UsuarioRepository
-    //lo utiliza AuthenticationService. para buscar el email
+    //lo utiliza AuthenticationService para buscar el email
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> usuarioRepository.findByEmail(username)
-                //TODO: ssanchez - capturar con globalexceptionhanlder @ControllerAdivce
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new EmailNotFoundException(username));
     }
 
     // Recibe las credenciales del usuario (a través del UsernamePasswordAuthenticationToken)
@@ -93,7 +89,7 @@ public class SecurityConfig {
         // http
         //         .csrf(csrf -> csrf.disable())
         //         .authorizeHttpRequests(auth -> auth
-        //                 // .requestMatchers("/api/productos/**").permitAll()
+        //                 // .requestMatchers("/api/recetas/**").permitAll()
         //                 .requestMatchers("/api/auth/**").permitAll()
         //                 .anyRequest().authenticated());
 
@@ -105,27 +101,37 @@ public class SecurityConfig {
                         // Rutas públicas que no requieren autenticación
                         //el controller /api/auth puede ser solicitado por cualquier usuario
                         .requestMatchers("/api/auth/**").permitAll()
-                        //el endpoint /api/productos con metodo get es público, cualquiera puede ver los productos
-                        .requestMatchers(HttpMethod.GET, "/api/productos/**").permitAll()
+                        // los endpoints /api/recetas y /api/recea-detalles
+                        // con método GET son públicos, cualquiera puede ver las recetas
+                        .requestMatchers(HttpMethod.GET, "/api/recetas/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/receta-detalles/**").permitAll()
 
-                        // Rutas que requieren autenticación para modificar productos
-                        //solo los usuarios autenticados pueden crear un producto
-                        .requestMatchers(HttpMethod.POST, "/api/productos").authenticated()
-                        //solo los usuarios autenticados pueden actualizar un producto
-                        .requestMatchers(HttpMethod.PUT, "/api/productos/**").authenticated()
-                        //solo los usuarios autenticados pueden eliminar un producto
-                        .requestMatchers(HttpMethod.DELETE, "/api/productos/**").authenticated()
+                        // Rutas que requieren rol ADMIN para crear/modificar productos
+                        //solo los admins pueden crear un producto
+                        .requestMatchers(HttpMethod.POST, "/api/recetas").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST, "/api/receta-detalles").hasRole(Rol.ADMIN.name())
+                        //solo los admins pueden actualizar un producto
+                        .requestMatchers(HttpMethod.PUT, "/api/recetas/**").hasRole(Rol.ADMIN.name())
+                        //solo los admins pueden eliminar un producto
+                        .requestMatchers(HttpMethod.DELETE, "/api/recetas/**").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/receta-detalles/**").hasRole(Rol.ADMIN.name())
 
                         // Rutas exclusivas para administradores
                         //verifica que el usuario esté autenticado y tenga el rol ADMIN
-                        .requestMatchers("/api/admin/**").hasRole(Rol.ADMIN.name())
+                        // TODO: habilitar o eliminar
+                        //.requestMatchers("/api/admin/**").hasRole(Rol.ADMIN.name())
 
                         // Rutas de pedidos solo para usuarios autenticados
+                        // TODO: revisar esto, tal vez algún endpoint debería ser solo para admins
                         .requestMatchers("/api/pedidos/**").authenticated()
+
 
                         // Cualquier otra ruta requiere autenticación
                         // con esta linea abarca requiere que todos los endpoints esten autenticados
-                        // no seía necesario post, put, delete /api/productos , api/pedidos
+                        // no seía necesario post, put, delete /api/recetas , api/pedidos
+                        //.anyRequest().authenticated());
+
+                        // TODO: volver a usar authenticated() cuando implementemos el login
                         .anyRequest().permitAll());
 
                         // insertar un filtro personalizado (su JwtFilter) en la cadena de filtros
@@ -138,6 +144,7 @@ public class SecurityConfig {
                         // Si el token es válido: El filtro establece la autenticación en el SecurityContext y llama a filterChain.doFilter(request, response) para pasar la solicitud al siguiente filtro y, finalmente, al controlador.
                         // Si el token falta o es inválido: El filtro rechaza la solicitud  o deja que la cadena continúe si el endpoint es público.
                         // Llegada al Controlador: Si el filtro permite el paso, la solicitud finalmente llega a su controlador.
+                        // TODO: habilitar esto cuando tengamos el login implementado
                         //.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
