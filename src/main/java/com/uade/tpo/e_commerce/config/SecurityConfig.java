@@ -126,7 +126,7 @@ public class SecurityConfig {
                         // Cualquier otra ruta requiere autenticación
                         // con esta linea abarca requiere que todos los endpoints esten autenticados
                         // no seía necesario post, put, delete /api/productos , api/pedidos
-                        .anyRequest().authenticated())
+                        .anyRequest().permitAll());
 
                         // insertar un filtro personalizado (su JwtFilter) en la cadena de filtros
                         // se ejecuta cada vez que se hace una solicitud a un endpoint
@@ -138,7 +138,7 @@ public class SecurityConfig {
                         // Si el token es válido: El filtro establece la autenticación en el SecurityContext y llama a filterChain.doFilter(request, response) para pasar la solicitud al siguiente filtro y, finalmente, al controlador.
                         // Si el token falta o es inválido: El filtro rechaza la solicitud  o deja que la cadena continúe si el endpoint es público.
                         // Llegada al Controlador: Si el filtro permite el paso, la solicitud finalmente llega a su controlador.
-                        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                        //.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
