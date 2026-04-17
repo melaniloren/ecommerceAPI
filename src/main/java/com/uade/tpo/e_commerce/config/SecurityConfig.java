@@ -101,20 +101,20 @@ public class SecurityConfig {
                         // Rutas públicas que no requieren autenticación
                         //el controller /api/auth puede ser solicitado por cualquier usuario
                         .requestMatchers("/api/auth/**").permitAll()
-                        // los endpoints /api/recetas y /api/recea-detalles
+                        // los endpoints /api/recetas y /api/receta-detalles
                         // con método GET son públicos, cualquiera puede ver las recetas
                         .requestMatchers(HttpMethod.GET, "/api/recetas/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/receta-detalles/**").permitAll()
 
                         // Rutas que requieren rol ADMIN para crear/modificar productos
                         //solo los admins pueden crear un producto
-                        .requestMatchers(HttpMethod.POST, "/api/recetas").hasRole(Rol.ADMIN.name())
-                        .requestMatchers(HttpMethod.POST, "/api/receta-detalles").hasRole(Rol.ADMIN.name())
+                        //.requestMatchers(HttpMethod.POST, "/api/recetas").hasRole(Rol.ADMIN.name())
+                        //.requestMatchers(HttpMethod.POST, "/api/receta-detalles").hasRole(Rol.ADMIN.name())
                         //solo los admins pueden actualizar un producto
-                        .requestMatchers(HttpMethod.PUT, "/api/recetas/**").hasRole(Rol.ADMIN.name())
+                        //.requestMatchers(HttpMethod.PUT, "/api/recetas/**").hasRole(Rol.ADMIN.name())
                         //solo los admins pueden eliminar un producto
-                        .requestMatchers(HttpMethod.DELETE, "/api/recetas/**").hasRole(Rol.ADMIN.name())
-                        .requestMatchers(HttpMethod.DELETE, "/api/receta-detalles/**").hasRole(Rol.ADMIN.name())
+                        //.requestMatchers(HttpMethod.DELETE, "/api/recetas/**").hasRole(Rol.ADMIN.name())
+                        //.requestMatchers(HttpMethod.DELETE, "/api/receta-detalles/**").hasRole(Rol.ADMIN.name())
 
                         // Rutas exclusivas para administradores
                         //verifica que el usuario esté autenticado y tenga el rol ADMIN
@@ -123,7 +123,7 @@ public class SecurityConfig {
 
                         // Rutas de pedidos solo para usuarios autenticados
                         // TODO: revisar esto, tal vez algún endpoint debería ser solo para admins
-                        .requestMatchers("/api/pedidos/**").authenticated()
+                        //.requestMatchers("/api/pedidos/**").authenticated()
 
 
                         // Cualquier otra ruta requiere autenticación
