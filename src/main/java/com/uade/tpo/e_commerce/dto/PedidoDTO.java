@@ -9,12 +9,14 @@ public class PedidoDTO {
     private Long id;
     private LocalDate fecha;
     private Double total;
-    
+    private Long usuarioId;
 
-    public PedidoDTO(Long id, LocalDate fecha, Double total) {
+    public PedidoDTO(Long id, LocalDate fecha, Double total, Long usuarioId) {
         this.id = id;
         this.fecha = fecha;
         this.total = total;
+        this.usuarioId = usuarioId;
     }
+
 }
      

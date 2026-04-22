@@ -107,22 +107,38 @@ public class SecurityConfig {
                         // con método GET son públicos, cualquiera puede ver las recetas
                         .requestMatchers(HttpMethod.GET, "/api/recetas/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/receta-detalles/**").permitAll()
-
+                        // .requestMatchers(HttpMethod.GET,"/api/categorias/**").permitAll() // los usuarios pueden ver el listado de usuarios, pero no los detalles
+                        .requestMatchers(HttpMethod.GET,"/api/pedidos/**").authenticated() //los usuarios pueden ver sus pedidos, pero no los de otros usuarios
+                        .requestMatchers(HttpMethod.GET,"/api/ingredientes/**").permitAll() // los ingredientes son públicos, cualquiera puede verlos
+                        .requestMatchers(HttpMethod.GET,"/api/detalle-pedidos/**").authenticated() // los usuarios pueden ver el detalle de sus pedidos, pero no los de otros usuarios
+                       // .requestMatchers(HttpMethod.GET,"/api/roles/**").hasRole(Rol.ADMIN.name()) TODO: revisar esto si hay parta de rol, faltaria el controller sino
+                        
                         // Rutas que requieren rol ADMIN para crear/modificar productos
                         //solo los admins pueden crear un producto
                         .requestMatchers(HttpMethod.POST, "/api/recetas").hasRole(Rol.ADMIN.name()) //  crea elementos del catálogo y no querés que cualquier usuario publique recetas.
                         .requestMatchers(HttpMethod.POST, "/api/ingredientes").hasRole(Rol.ADMIN.name())
-                        
-                        
+                        .requestMatchers(HttpMethod.POST, "/api/receta-detalles/**").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST, "/api/pedidos").authenticated() // los usuarios pueden crear pedidos, pero no los de otros usuarios
+                        .requestMatchers(HttpMethod.POST, "/api/detalle-pedidos/**").hasRole(Rol.ADMIN.name()) 
+                        // .requestMatchers(HttpMethod.POST, "/api/categorias/**").hasRole(Rol.ADMIN.name()) 
                         
                         //solo los admins pueden actualizar un producto
                         .requestMatchers(HttpMethod.PUT, "/api/recetas/**").hasRole(Rol.ADMIN.name())
                         .requestMatchers(HttpMethod.PUT, "/api/ingredientes/**").hasRole(Rol.ADMIN.name()) //cubre los dos endpoints de update ingrediente, el update stock y el update ingrediente 
-
+                        .requestMatchers(HttpMethod.PUT, "/api/pedidos/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/detalle-pedidos/**").hasRole(Rol.ADMIN.name())
+                        // .requestMatchers(HttpMethod.PUT, "/api/categorias/**").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT, "/api/detalle-pedidos/**").hasRole(Rol.ADMIN.name())
+                        
 
                         //solo los admins pueden eliminar un producto
                         .requestMatchers(HttpMethod.DELETE, "/api/recetas/**").hasRole(Rol.ADMIN.name())
                         .requestMatchers(HttpMethod.DELETE, "/api/ingredientes/**").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/receta-detalles/**").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/pedidos/**").authenticated() // Usuarios pueden borrar su pedido, admins tambien
+                        .requestMatchers(HttpMethod.DELETE, "/api/detalle-pedidos/**").hasRole(Rol.ADMIN.name())
+                        // .requestMatchers(HttpMethod.DELETE, "/api/categorias/**").hasRole(Rol.ADMIN.name())
+                        
 
                         // Rutas de usuarios: solo ADMIN
                         .requestMatchers(HttpMethod.GET, "/api/usuarios/**").hasRole(Rol.ADMIN.name())

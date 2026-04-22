@@ -35,9 +35,10 @@ public class PedidoController {
     }
 
     // del http://localhost:8080/api/pedido/1 -> elimina el pedido con id 1
-    @DeleteMapping("/{id}")
-    public void deletePedidoById(@PathVariable Long id) {
+@DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePedidoById(@PathVariable Long id) {
         pedidoService.deletePedidoById(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping
