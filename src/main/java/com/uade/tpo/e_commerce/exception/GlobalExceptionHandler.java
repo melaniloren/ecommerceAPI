@@ -8,13 +8,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(UsuarioNotFoundException.class)
-    public ResponseEntity<String> manejarUsuarioNoEncontrado(UsuarioNotFoundException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-    }
-
-    @ExceptionHandler(RecetaNotFoundException.class)
-    public ResponseEntity<String> manejarRecetaNoEncontrada(RecetaNotFoundException ex) {
+    // Este único método atrapará UsuarioNotFound, RecetaNotFound, EmailNotFound, etc.
+    @ExceptionHandler(RecursoNotFoundException.class)
+    public ResponseEntity<String> manejarRecursosNoEncontrados(RecursoNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
