@@ -109,12 +109,12 @@ public class SecurityConfig {
 
                         // Rutas que requieren rol ADMIN para crear/modificar productos
                         //solo los admins pueden crear un producto
-                        //.requestMatchers(HttpMethod.POST, "/api/recetas").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST, "/api/recetas").hasRole(Rol.ADMIN.name()) //  crea elementos del catálogo y no querés que cualquier usuario publique recetas.
                         //.requestMatchers(HttpMethod.POST, "/api/receta-detalles").hasRole(Rol.ADMIN.name())
                         //solo los admins pueden actualizar un producto
-                        //.requestMatchers(HttpMethod.PUT, "/api/recetas/**").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT, "/api/recetas/**").hasRole(Rol.ADMIN.name())
                         //solo los admins pueden eliminar un producto
-                        //.requestMatchers(HttpMethod.DELETE, "/api/recetas/**").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/recetas/**").hasRole(Rol.ADMIN.name())
                         //.requestMatchers(HttpMethod.DELETE, "/api/receta-detalles/**").hasRole(Rol.ADMIN.name())
 
                         // Rutas exclusivas para administradores
