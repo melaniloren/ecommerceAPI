@@ -1,7 +1,6 @@
 package com.uade.tpo.e_commerce.config;
 
 
-import com.uade.tpo.e_commerce.exception.EmailNotFoundException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -13,9 +12,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-//import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.uade.tpo.e_commerce.exception.EmailNotFoundException;
 import com.uade.tpo.e_commerce.model.Rol;
 import com.uade.tpo.e_commerce.repository.UsuarioRepository;
 import com.uade.tpo.e_commerce.security.JwtFilter;
@@ -124,6 +123,12 @@ public class SecurityConfig {
                         //solo los admins pueden eliminar un producto
                         .requestMatchers(HttpMethod.DELETE, "/api/recetas/**").hasRole(Rol.ADMIN.name())
                         .requestMatchers(HttpMethod.DELETE, "/api/ingredientes/**").hasRole(Rol.ADMIN.name())
+
+                        // Rutas de usuarios: solo ADMIN
+                        .requestMatchers(HttpMethod.GET, "/api/usuarios/**").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST, "/api/usuarios").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT, "/api/usuarios/**").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/usuarios/**").hasRole(Rol.ADMIN.name())
 
                     
 

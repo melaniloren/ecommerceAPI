@@ -2,9 +2,6 @@ package com.uade.tpo.e_commerce.controller;
 
 import java.util.List;
 
-import com.uade.tpo.e_commerce.dto.UsuarioDTO;
-import com.uade.tpo.e_commerce.dto.UsuarioNuevoDTO;
-import com.uade.tpo.e_commerce.dto.UsuarioUpdateDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.uade.tpo.e_commerce.dto.UsuarioDTO;
+import com.uade.tpo.e_commerce.dto.UsuarioNuevoDTO;
+import com.uade.tpo.e_commerce.dto.UsuarioUpdateDTO;
 import com.uade.tpo.e_commerce.model.Usuario;
 import com.uade.tpo.e_commerce.service.UsuarioService;
 
