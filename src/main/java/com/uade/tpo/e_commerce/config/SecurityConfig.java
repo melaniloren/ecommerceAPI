@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 //import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.uade.tpo.e_commerce.model.Rol;
 import com.uade.tpo.e_commerce.repository.UsuarioRepository;
@@ -132,7 +133,7 @@ public class SecurityConfig {
                         //.anyRequest().authenticated());
 
                         // TODO: volver a usar authenticated() cuando implementemos el login
-                        .anyRequest().permitAll());
+                        .anyRequest().permitAll())
 
                         // insertar un filtro personalizado (su JwtFilter) en la cadena de filtros
                         // se ejecuta cada vez que se hace una solicitud a un endpoint
@@ -145,7 +146,7 @@ public class SecurityConfig {
                         // Si el token falta o es inválido: El filtro rechaza la solicitud  o deja que la cadena continúe si el endpoint es público.
                         // Llegada al Controlador: Si el filtro permite el paso, la solicitud finalmente llega a su controlador.
                         // TODO: habilitar esto cuando tengamos el login implementado
-                        //.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
