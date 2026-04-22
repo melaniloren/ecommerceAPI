@@ -103,6 +103,8 @@ public class SecurityConfig {
                         //el controller /api/auth puede ser solicitado por cualquier usuario
                         .requestMatchers("/api/auth/**").permitAll()
                         // los endpoints /api/recetas y /api/receta-detalles
+
+
                         // con método GET son públicos, cualquiera puede ver las recetas
                         .requestMatchers(HttpMethod.GET, "/api/recetas/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/receta-detalles/**").permitAll()
@@ -110,12 +112,23 @@ public class SecurityConfig {
                         // Rutas que requieren rol ADMIN para crear/modificar productos
                         //solo los admins pueden crear un producto
                         .requestMatchers(HttpMethod.POST, "/api/recetas").hasRole(Rol.ADMIN.name()) //  crea elementos del catálogo y no querés que cualquier usuario publique recetas.
-                        //.requestMatchers(HttpMethod.POST, "/api/receta-detalles").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST, "/api/ingredientes").hasRole(Rol.ADMIN.name())
+                        
+                        
+                        
                         //solo los admins pueden actualizar un producto
                         .requestMatchers(HttpMethod.PUT, "/api/recetas/**").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT, "/api/ingredientes/**").hasRole(Rol.ADMIN.name()) //cubre los dos endpoints de update ingrediente, el update stock y el update ingrediente 
+
+
                         //solo los admins pueden eliminar un producto
                         .requestMatchers(HttpMethod.DELETE, "/api/recetas/**").hasRole(Rol.ADMIN.name())
-                        //.requestMatchers(HttpMethod.DELETE, "/api/receta-detalles/**").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/ingredientes/**").hasRole(Rol.ADMIN.name())
+
+                    
+
+                        
+                        
 
                         // Rutas exclusivas para administradores
                         //verifica que el usuario esté autenticado y tenga el rol ADMIN
