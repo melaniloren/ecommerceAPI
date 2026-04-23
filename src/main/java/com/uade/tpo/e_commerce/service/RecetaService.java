@@ -2,18 +2,17 @@ package com.uade.tpo.e_commerce.service;
 
 import java.util.List;
 
-import com.uade.tpo.e_commerce.dto.RecetaRequestDTO;
-import com.uade.tpo.e_commerce.model.Categoria;
-import com.uade.tpo.e_commerce.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.uade.tpo.e_commerce.dto.RecetaDTO;
-import com.uade.tpo.e_commerce.model.Receta;
-import com.uade.tpo.e_commerce.repository.RecetaRepository;
+import com.uade.tpo.e_commerce.dto.RecetaRequestDTO;
 import com.uade.tpo.e_commerce.exception.RecetaNotFoundException;
-
-import org.springframework.transaction.annotation.Transactional;
+import com.uade.tpo.e_commerce.model.Categoria;
+import com.uade.tpo.e_commerce.model.Receta;
+import com.uade.tpo.e_commerce.repository.CategoriaRepository;
+import com.uade.tpo.e_commerce.repository.RecetaRepository;
 
 @Service
 public class RecetaService {
@@ -60,7 +59,7 @@ public class RecetaService {
     @Transactional(readOnly = true)
     public RecetaDTO getRecetaById(Long id) {
         Receta receta = recetaRepository.findById(id)
-                .orElseThrow(() -> new RecetaNotFoundException(id));
+                .orElseThrow(() -> new RecetaNotFoundException("receta",id));
         return toDTO(receta);
     }
 
@@ -73,7 +72,7 @@ public class RecetaService {
     @Transactional
     public RecetaDTO updateReceta(Long id, RecetaRequestDTO dto) {
         Receta existing = recetaRepository.findById(id)
-                .orElseThrow(() -> new RecetaNotFoundException(id));
+                .orElseThrow(() -> new RecetaNotFoundException("receta",id));
         existing.setNombre(dto.getNombre());
         existing.setDescripcion(dto.getDescripcion());
         existing.setPrecioReceta(dto.getPrecio());
@@ -99,7 +98,7 @@ public class RecetaService {
     @Transactional
     public void deleteRecetaById(Long id) {
         if (!recetaRepository.existsById(id)) {
-            throw new RecetaNotFoundException(id);
+            throw new RecetaNotFoundException("receta",id);
         }
         recetaRepository.deleteById(id);
     }

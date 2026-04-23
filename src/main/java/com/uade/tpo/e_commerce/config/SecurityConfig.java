@@ -38,7 +38,7 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> usuarioRepository.findByEmail(username)
-                .orElseThrow(() -> new EmailNotFoundException(username));
+                .orElseThrow(() -> new EmailNotFoundException("email", username));
     }
 
     // Recibe las credenciales del usuario (a través del UsernamePasswordAuthenticationToken)

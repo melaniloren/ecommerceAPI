@@ -38,7 +38,7 @@ public class UsuarioService {
     public UsuarioDTO getUsuarioById(Long id) {
         Usuario usuario = usuarioRepository.findById(id).orElse(null);
         if (usuario == null) {
-            throw new UsuarioNotFoundException(id);
+            throw new UsuarioNotFoundException("usuario",id);
         }
         return new UsuarioDTO(usuario.getIdUsuario(), usuario.getNombre(), usuario.getApellido(), usuario.getEmail());
     }
@@ -73,7 +73,7 @@ public class UsuarioService {
     public UsuarioDTO updateUsuario(Long id, UsuarioUpdateDTO usuarioUpdateDTO) {
         Usuario usuario = usuarioRepository.findById(id).orElse(null);
         if (usuario == null) {
-            throw new UsuarioNotFoundException(id);
+            throw new UsuarioNotFoundException("usuario",id);
         }
         if (usuarioUpdateDTO.getApellido() == null) {
             throw new IllegalArgumentException("El apellido no puede ser nulo");

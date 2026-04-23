@@ -35,7 +35,7 @@ public class RecetaDetalleService {
         RecetaDetalle recetaDetalle = recetaDetalleRepository.findById(id).orElse(null);
 
         if (recetaDetalle == null) {
-            throw new RecetaNotFoundException(id);
+            throw new RecetaNotFoundException("receta detalle",id);
         }
 
         return new RecetaDetalleDTO(
@@ -70,7 +70,7 @@ public class RecetaDetalleService {
         RecetaDetalle recetaDetalle = recetaDetalleRepository.findById(id).orElse(null);
 
         if (recetaDetalle == null) {
-            throw new RecetaNotFoundException(id);
+            throw new RecetaNotFoundException("receta detalle",id);
         }
 
         if (dto.getCantidad() <= 0) {
@@ -93,7 +93,7 @@ public class RecetaDetalleService {
         RecetaDetalle recetaDetalle = recetaDetalleRepository.findById(id).orElse(null);
 
         if (recetaDetalle == null) {
-            throw new RecetaNotFoundException(id);
+            throw new RecetaNotFoundException("receta detalle",id);
         }
 
         recetaDetalleRepository.deleteById(id);
