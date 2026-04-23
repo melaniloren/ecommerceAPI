@@ -6,7 +6,7 @@
 - Joaquin Latasa Montenegro
 - Joaquin Monteverde
 - Rocio Fischer
-- Melani Rocio 
+- Melani R Lorenzo
 - Valentina Clemente
 - Tomas Brizuela
 - Michelle Perna
