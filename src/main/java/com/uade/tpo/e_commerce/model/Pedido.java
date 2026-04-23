@@ -25,7 +25,7 @@ public class Pedido {
 
     //relacion necesaria para saber a que usuario pertenece el pedido
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usuario_id")
+    @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)

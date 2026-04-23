@@ -3,6 +3,7 @@ package com.uade.tpo.e_commerce.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.uade.tpo.e_commerce.dto.PedidoRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -63,44 +64,39 @@ public class PedidoService {
         pedidoRepository.delete(pedido);
     }
 
-    public PedidoDTO savePedido(PedidoDTO pedidoDTO) {
+    public PedidoDTO savePedido(PedidoRequestDTO pedidoRequestDTO) {
 
         Pedido pedido = Pedido.builder()
-                .fecha(pedidoDTO.getFecha())
-                .total(pedidoDTO.getTotal())
+                .fecha(pedidoRequestDTO.getFecha())
+                .total(pedidoRequestDTO.getTotal())
                 .build();
         pedido.setUsuario((Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
         Pedido pedidoAdd = pedidoRepository.save(pedido);
 
-        PedidoDTO pedidoDTOAdd = new PedidoDTO(
+        return new PedidoDTO(
                 pedidoAdd.getIdPedido(),
                 pedidoAdd.getFecha(),
                 pedidoAdd.getTotal(),
                 pedidoAdd.getUsuario() != null ? pedidoAdd.getUsuario().getIdUsuario() : null);
-
-
-        return pedidoDTOAdd;
     }
 
-    public PedidoDTO updatePedido(Long id, PedidoDTO pedidoDTO) {
+    public PedidoDTO updatePedido(Long id, PedidoRequestDTO pedidoRequestDTO) {
 
         Pedido pedido = pedidoRepository.findById(id).orElseThrow(() -> new RuntimeException("Pedido not found"));
         if (!pedido.getUsuario().getIdUsuario().equals(getCurrentUserId())) {
             throw new PedidoNotOwnedException("No eres el dueño del pedido " + id);
         }
 
-        pedido.setFecha(pedidoDTO.getFecha());
-        pedido.setTotal(pedidoDTO.getTotal());
+        pedido.setFecha(pedidoRequestDTO.getFecha());
+        pedido.setTotal(pedidoRequestDTO.getTotal());
 
         Pedido pedidoActualizado = pedidoRepository.save(pedido);
 
-        PedidoDTO pedidoDTOActualizado = new PedidoDTO(
+        return new PedidoDTO(
                 pedidoActualizado.getIdPedido(),
                 pedidoActualizado.getFecha(),
                 pedidoActualizado.getTotal(),
                 pedidoActualizado.getUsuario() != null ? pedidoActualizado.getUsuario().getIdUsuario() : null);
-
-        return pedidoDTOActualizado;
     }
 }

@@ -2,6 +2,7 @@ package com.uade.tpo.e_commerce.controller;
 
 import java.util.List;
 
+import com.uade.tpo.e_commerce.dto.PedidoRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,15 +36,15 @@ public class PedidoController {
     }
 
     // del http://localhost:8080/api/pedido/1 -> elimina el pedido con id 1
-@DeleteMapping("/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePedidoById(@PathVariable Long id) {
         pedidoService.deletePedidoById(id);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping
-    public ResponseEntity<PedidoDTO> createPedido(@RequestBody PedidoDTO pedidoDTO) {
-        PedidoDTO created = pedidoService.savePedido(pedidoDTO);
+    public ResponseEntity<PedidoDTO> createPedido(@RequestBody PedidoRequestDTO pedidoRequestDTO) {
+        PedidoDTO created = pedidoService.savePedido(pedidoRequestDTO);
         return ResponseEntity.status(201).body(created);
     }
     
