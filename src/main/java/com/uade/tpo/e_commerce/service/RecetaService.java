@@ -36,6 +36,22 @@ public class RecetaService {
     }
 
     @Transactional(readOnly = true)
+    public List<RecetaDTO> buscarRecetasPorPrecioMenorA(Double precio) {
+        return recetaRepository.findByPrecioRecetaLessThanEqual(precio)
+                .stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List <RecetaDTO> buscarRecetasPorNombreYPrecioMenorA(String nombre, Double precio) {
+        return recetaRepository.findByNombreContainingIgnoreCaseAndPrecioRecetaLessThanEqual(nombre, precio)
+                .stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
     public RecetaDTO getRecetaById(Long id) {
         Receta receta = recetaRepository.findById(id)
                 .orElseThrow(() -> new RecetaNotFoundException(id));

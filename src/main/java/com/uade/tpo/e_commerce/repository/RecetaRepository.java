@@ -9,4 +9,10 @@ public interface RecetaRepository extends JpaRepository<Receta, Long> {
 
     @Query("SELECT r FROM Receta r WHERE r.nombre LIKE %:nombre%")
     List<Receta> findByNombre(String nombre);
+
+    //@Query("SELECT r FROM Receta r WHERE r.precioReceta <:precio")
+    List<Receta> findByPrecioRecetaLessThanEqual(Double precio);
+
+    List<Receta> findByNombreContainingIgnoreCaseAndPrecioRecetaLessThanEqual(String nombre, Double precio);
+
 }

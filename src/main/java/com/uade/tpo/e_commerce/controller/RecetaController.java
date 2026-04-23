@@ -23,11 +23,26 @@ public class RecetaController {
     }
 
     @GetMapping("/buscar")
-    public ResponseEntity<List<RecetaDTO>> buscarRecetasPorNombre(@RequestParam(required = false) String nombre) {
-        if (nombre == null || nombre.isEmpty()) {
+    public ResponseEntity<List<RecetaDTO>> buscarRecetas(
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) Double precio) {
+
+        boolean sinNombre = (nombre == null || nombre.isBlank());
+        boolean sinPrecio = (precio == null);
+
+        if (sinNombre && sinPrecio) {
             return ResponseEntity.ok(recetaService.getAllRecetas());
         }
-        return ResponseEntity.ok(recetaService.buscarRecetasPorNombre(nombre));
+
+        if (!sinNombre && !sinPrecio) {
+            return ResponseEntity.ok(recetaService.buscarRecetasPorNombreYPrecioMenorA(nombre, precio));
+        }
+
+        if (!sinNombre) {
+            return ResponseEntity.ok(recetaService.buscarRecetasPorNombre(nombre));
+        }
+
+        return ResponseEntity.ok(recetaService.buscarRecetasPorPrecioMenorA(precio));
     }
 
     @GetMapping("/{id}")
