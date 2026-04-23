@@ -138,7 +138,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/pedidos/**").authenticated() // Usuarios pueden borrar su pedido, admins tambien
                         .requestMatchers(HttpMethod.DELETE, "/api/detalle-pedidos/**").hasRole(Rol.ADMIN.name())
                         // .requestMatchers(HttpMethod.DELETE, "/api/categorias/**").hasRole(Rol.ADMIN.name())
-                        
+
 
                         // Rutas de usuarios: solo ADMIN
                         .requestMatchers(HttpMethod.GET, "/api/usuarios/**").hasRole(Rol.ADMIN.name())
@@ -166,8 +166,6 @@ public class SecurityConfig {
                         // no seía necesario post, put, delete /api/recetas , api/pedidos
                         //.anyRequest().authenticated());
 
-                        // TODO: volver a usar authenticated() cuando implementemos el login
-                        .anyRequest().permitAll())
 
                         // insertar un filtro personalizado (su JwtFilter) en la cadena de filtros
                         // se ejecuta cada vez que se hace una solicitud a un endpoint
