@@ -1,7 +1,6 @@
 package com.uade.tpo.e_commerce.config;
 
 
-import com.uade.tpo.e_commerce.exception.EmailNotFoundException;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -13,8 +12,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-//import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.uade.tpo.e_commerce.exception.EmailNotFoundException;
 import com.uade.tpo.e_commerce.model.Rol;
 import com.uade.tpo.e_commerce.repository.UsuarioRepository;
 import com.uade.tpo.e_commerce.security.JwtFilter;
@@ -102,19 +102,56 @@ public class SecurityConfig {
                         //el controller /api/auth puede ser solicitado por cualquier usuario
                         .requestMatchers("/api/auth/**").permitAll()
                         // los endpoints /api/recetas y /api/receta-detalles
+
+
                         // con método GET son públicos, cualquiera puede ver las recetas
                         .requestMatchers(HttpMethod.GET, "/api/recetas/**").permitAll()
                         .requestMatchers(HttpMethod.GET,"/api/receta-detalles/**").permitAll()
-
+                        .requestMatchers(HttpMethod.GET,"/api/categorias/**").permitAll() // los usuarios pueden ver el listado de usuarios, pero no los detalles
+                        .requestMatchers(HttpMethod.GET,"/api/pedidos/**").authenticated() //los usuarios pueden ver sus pedidos, pero no los de otros usuarios
+                        .requestMatchers(HttpMethod.GET,"/api/ingredientes/**").permitAll() // los ingredientes son públicos, cualquiera puede verlos
+                        .requestMatchers(HttpMethod.GET,"/api/detalle-pedidos/**").authenticated() // los usuarios pueden ver el detalle de sus pedidos, pero no los de otros usuarios
+                       // .requestMatchers(HttpMethod.GET,"/api/roles/**").hasRole(Rol.ADMIN.name()) TODO: revisar esto si hay parta de rol, faltaria el controller sino
+                        
                         // Rutas que requieren rol ADMIN para crear/modificar productos
                         //solo los admins pueden crear un producto
-                        //.requestMatchers(HttpMethod.POST, "/api/recetas").hasRole(Rol.ADMIN.name())
-                        //.requestMatchers(HttpMethod.POST, "/api/receta-detalles").hasRole(Rol.ADMIN.name())
-                        //solo los admins pueden actualizar un producto
-                        //.requestMatchers(HttpMethod.PUT, "/api/recetas/**").hasRole(Rol.ADMIN.name())
-                        //solo los admins pueden eliminar un producto
-                        //.requestMatchers(HttpMethod.DELETE, "/api/recetas/**").hasRole(Rol.ADMIN.name())
-                        //.requestMatchers(HttpMethod.DELETE, "/api/receta-detalles/**").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST, "/api/recetas").hasRole(Rol.ADMIN.name()) //  crea elementos del catálogo y no querés que cualquier usuario publique recetas.
+                        .requestMatchers(HttpMethod.POST, "/api/ingredientes").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST, "/api/receta-detalles/**").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST, "/api/pedidos").authenticated() // los usuarios pueden crear pedidos, pero no los de otros usuarios
+                        .requestMatchers(HttpMethod.POST, "/api/detalle-pedidos/**").hasRole(Rol.ADMIN.name()) 
+                        .requestMatchers(HttpMethod.POST, "/api/categorias/**").hasRole(Rol.ADMIN.name())
+                        
+                        //solo los admins pueden actualizar una entidad
+                        .requestMatchers(HttpMethod.PUT, "/api/recetas/**").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.PATCH, "/api/recetas/**").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT, "/api/ingredientes/**").hasRole(Rol.ADMIN.name()) //cubre los dos endpoints de update ingrediente, el update stock y el update ingrediente 
+                        .requestMatchers(HttpMethod.PUT, "/api/pedidos/**").authenticated()
+                        .requestMatchers(HttpMethod.PUT, "/api/detalle-pedidos/**").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT, "/api/categorias/**").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT, "/api/detalle-pedidos/**").hasRole(Rol.ADMIN.name())
+                        
+
+                        //solo los admins pueden eliminar una entidad
+                        .requestMatchers(HttpMethod.DELETE, "/api/recetas/**").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/ingredientes/**").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/receta-detalles/**").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/pedidos/**").authenticated() // Usuarios pueden borrar su pedido, admins tambien
+                        .requestMatchers(HttpMethod.DELETE, "/api/detalle-pedidos/**").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/categorias/**").hasRole(Rol.ADMIN.name())
+
+
+                        // Rutas de usuarios: solo ADMIN
+                        .requestMatchers(HttpMethod.GET, "/api/usuarios/**").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.POST, "/api/usuarios").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.PUT, "/api/usuarios/**").hasRole(Rol.ADMIN.name())
+                        .requestMatchers(HttpMethod.DELETE, "/api/usuarios/**").hasRole(Rol.ADMIN.name())
+                )
+
+                    
+
+                        
+                        
 
                         // Rutas exclusivas para administradores
                         //verifica que el usuario esté autenticado y tenga el rol ADMIN
@@ -131,8 +168,6 @@ public class SecurityConfig {
                         // no seía necesario post, put, delete /api/recetas , api/pedidos
                         //.anyRequest().authenticated());
 
-                        // TODO: volver a usar authenticated() cuando implementemos el login
-                        .anyRequest().permitAll());
 
                         // insertar un filtro personalizado (su JwtFilter) en la cadena de filtros
                         // se ejecuta cada vez que se hace una solicitud a un endpoint
@@ -145,7 +180,7 @@ public class SecurityConfig {
                         // Si el token falta o es inválido: El filtro rechaza la solicitud  o deja que la cadena continúe si el endpoint es público.
                         // Llegada al Controlador: Si el filtro permite el paso, la solicitud finalmente llega a su controlador.
                         // TODO: habilitar esto cuando tengamos el login implementado
-                        //.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+                        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

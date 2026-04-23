@@ -5,18 +5,16 @@ import java.time.LocalDate;
 import lombok.Data;
 
 @Data
-public class PedidoDTO {
-    private Long id;
+public class PedidoRequestDTO {
     private LocalDate fecha;
     private Double total;
     private Long usuarioId;
 
-    public PedidoDTO(Long id, LocalDate fecha, Double total, Long usuarioId) {
-        this.id = id;
+    public PedidoRequestDTO(LocalDate fecha, Double total, Long usuarioId) {
         this.fecha = fecha;
         this.total = total;
         this.usuarioId = usuarioId;
     }
 
 }
-     
+

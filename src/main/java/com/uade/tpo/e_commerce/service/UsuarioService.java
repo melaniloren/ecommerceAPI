@@ -2,23 +2,30 @@ package com.uade.tpo.e_commerce.service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import com.uade.tpo.e_commerce.dto.UsuarioDTO;
 import com.uade.tpo.e_commerce.dto.UsuarioNuevoDTO;
 import com.uade.tpo.e_commerce.dto.UsuarioUpdateDTO;
 import com.uade.tpo.e_commerce.exception.UsuarioNotFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import jakarta.transaction.Transactional;
 import com.uade.tpo.e_commerce.model.Usuario;
 import com.uade.tpo.e_commerce.repository.UsuarioRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
 
+
 public class UsuarioService {
+
     @Autowired
     private UsuarioRepository usuarioRepository;
+    
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<Usuario> getAllUsuarios(){
         return usuarioRepository.findAll();
@@ -56,7 +63,7 @@ public class UsuarioService {
                 nombre(usuarioNuevoDTO.getNombre()).
                 apellido(usuarioNuevoDTO.getApellido()).
                 email(usuarioNuevoDTO.getEmail()).
-                contrasenia(usuarioNuevoDTO.getContrasenia()).
+                contrasenia(passwordEncoder.encode(usuarioNuevoDTO.getContrasenia())).
                 build();
 
         Usuario nuevoUsuario = usuarioRepository.save(usuario);

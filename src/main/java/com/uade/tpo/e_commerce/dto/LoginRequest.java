@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class LoginRequest {
     private String email;
     private String password;
+    //no seria contrasenia? o password esta bien? no se si es mejor usar el mismo idioma en todo el proyecto o no, pero me parece que password es mas comun y entendible para los programadores
 }

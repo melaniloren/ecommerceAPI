@@ -3,6 +3,8 @@ package com.uade.tpo.e_commerce.service;
 import java.util.List;
 
 import com.uade.tpo.e_commerce.dto.RecetaRequestDTO;
+import com.uade.tpo.e_commerce.model.Categoria;
+import com.uade.tpo.e_commerce.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +20,38 @@ public class RecetaService {
 
     @Autowired
     private RecetaRepository recetaRepository;
+    @Autowired
+    private CategoriaService categoriaService;
+    @Autowired
+    private CategoriaRepository categoriaRepository;
 
     @Transactional(readOnly = true)
     public List<RecetaDTO> getAllRecetas() {
         return recetaRepository.findAll()
+                .stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<RecetaDTO> buscarRecetasPorNombre(String nombre) {
+        return recetaRepository.findByNombre(nombre)
+            .stream()
+            .map(this::toDTO)
+            .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<RecetaDTO> buscarRecetasPorPrecioMenorA(Double precio) {
+        return recetaRepository.findByPrecioRecetaLessThanEqual(precio)
+                .stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List <RecetaDTO> buscarRecetasPorNombreYPrecioMenorA(String nombre, Double precio) {
+        return recetaRepository.findByNombreContainingIgnoreCaseAndPrecioRecetaLessThanEqual(nombre, precio)
                 .stream()
                 .map(this::toDTO)
                 .toList();
@@ -51,6 +81,22 @@ public class RecetaService {
     }
 
     @Transactional
+    public RecetaDTO agregarACategoria(Long idReceta, Long idCategoria) {
+        Receta receta = recetaRepository.getReferenceById(idReceta);
+        Categoria categoria = categoriaRepository.getReferenceById(idCategoria);
+        receta.getCategorias().add(categoria);
+        return toDTO(recetaRepository.save(receta));
+    }
+
+    @Transactional
+    public RecetaDTO eliminarDeCategoria(Long idReceta, Long idCategoria) {
+        Receta receta = recetaRepository.getReferenceById(idReceta);
+        Categoria categoria = categoriaRepository.getReferenceById(idCategoria);
+        receta.getCategorias().remove(categoria);
+        return toDTO(recetaRepository.save(receta));
+    }
+
+    @Transactional
     public void deleteRecetaById(Long id) {
         if (!recetaRepository.existsById(id)) {
             throw new RecetaNotFoundException(id);
@@ -58,13 +104,17 @@ public class RecetaService {
         recetaRepository.deleteById(id);
     }
 
-    private RecetaDTO toDTO(Receta receta) {
+    RecetaDTO toDTO(Receta receta) {
         return new RecetaDTO(
-            receta.getIdReceta(),
-            receta.getNombre(),
-            receta.getDescripcion(),
-            receta.getPrecioReceta()
-    );
+                receta.getIdReceta(),
+                receta.getNombre(),
+                receta.getDescripcion(),
+                receta.getPrecioReceta(),
+                receta.getCategorias()
+                        .stream()
+                        .map(categoriaService::toDTO)
+                        .toList()
+        );
 }
 
     private Receta toEntity(RecetaRequestDTO dto) {
@@ -72,7 +122,12 @@ public class RecetaService {
                 nombre(dto.getNombre()).
                 descripcion(dto.getDescripcion()).
                 precioReceta(dto.getPrecio()).
+                categorias(dto.getCategorias()
+                                .stream()
+                                .map(categoriaRepository::getReferenceById)
+                                .toList()).
                 build();
     }
+
 
 }

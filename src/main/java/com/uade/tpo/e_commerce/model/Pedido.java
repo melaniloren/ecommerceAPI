@@ -23,6 +23,11 @@ public class Pedido {
 
     private Double total;
 
+    //relacion necesaria para saber a que usuario pertenece el pedido
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_usuario")
+    private Usuario usuario;
+
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
     private List<DetallePedido> detalles;
 
