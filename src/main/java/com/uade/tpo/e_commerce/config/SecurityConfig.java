@@ -146,6 +146,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/usuarios").hasRole(Rol.ADMIN.name())
                         .requestMatchers(HttpMethod.PUT, "/api/usuarios/**").hasRole(Rol.ADMIN.name())
                         .requestMatchers(HttpMethod.DELETE, "/api/usuarios/**").hasRole(Rol.ADMIN.name())
+                        .anyRequest().authenticated()
                 )
 
                     
