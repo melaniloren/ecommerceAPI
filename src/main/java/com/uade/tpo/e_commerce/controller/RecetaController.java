@@ -18,13 +18,21 @@ public class RecetaController {
     private RecetaService recetaService;
 
     @GetMapping
-    public List<RecetaDTO> getAllRecetas() {
-        return recetaService.getAllRecetas();
+    public ResponseEntity<List<RecetaDTO>> getAllRecetas() {
+        return ResponseEntity.ok(recetaService.getAllRecetas());
+    }
+
+    @GetMapping("/buscar")
+    public ResponseEntity<List<RecetaDTO>> buscarRecetasPorNombre(@RequestParam(required = false) String nombre) {
+        if (nombre == null || nombre.isEmpty()) {
+            return ResponseEntity.ok(recetaService.getAllRecetas());
+        }
+        return ResponseEntity.ok(recetaService.buscarRecetasPorNombre(nombre));
     }
 
     @GetMapping("/{id}")
-    public RecetaDTO getRecetaById(@PathVariable Long id) {
-        return recetaService.getRecetaById(id);
+    public ResponseEntity<RecetaDTO> getRecetaById(@PathVariable Long id) {
+        return ResponseEntity.ok(recetaService.getRecetaById(id));
     }
 
     @PostMapping
@@ -33,8 +41,8 @@ public class RecetaController {
     }
 
     @PutMapping("/{id}")
-    public RecetaDTO updateReceta(@PathVariable Long id, @RequestBody RecetaRequestDTO dto) {
-        return recetaService.updateReceta(id, dto);
+    public ResponseEntity<RecetaDTO> updateReceta(@PathVariable Long id, @RequestBody RecetaRequestDTO dto) {
+        return ResponseEntity.ok(recetaService.updateReceta(id, dto));
     }
 
     @DeleteMapping("/{id}")

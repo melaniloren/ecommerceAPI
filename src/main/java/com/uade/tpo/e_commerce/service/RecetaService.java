@@ -28,6 +28,14 @@ public class RecetaService {
     }
 
     @Transactional(readOnly = true)
+    public List<RecetaDTO> buscarRecetasPorNombre(String nombre) {
+        return recetaRepository.findByNombre(nombre)
+            .stream()
+            .map(this::toDTO)
+            .toList();
+    }
+
+    @Transactional(readOnly = true)
     public RecetaDTO getRecetaById(Long id) {
         Receta receta = recetaRepository.findById(id)
                 .orElseThrow(() -> new RecetaNotFoundException(id));
@@ -74,5 +82,7 @@ public class RecetaService {
                 precioReceta(dto.getPrecio()).
                 build();
     }
+
+
 
 }
