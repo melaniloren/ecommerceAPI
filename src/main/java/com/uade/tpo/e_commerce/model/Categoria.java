@@ -1,12 +1,18 @@
 package com.uade.tpo.e_commerce.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Data
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "categorias")
 public class Categoria {
 
@@ -21,6 +27,6 @@ public class Categoria {
 
     @ManyToMany(mappedBy = "categorias")
     private List<Receta> recetas;
-    //categoria.getProductos(); // trae los productos de la categoria
+    //categoria.getRecetas(); // trae los productos de la categoria
 }
 

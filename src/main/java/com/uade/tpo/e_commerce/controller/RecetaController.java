@@ -60,6 +60,16 @@ public class RecetaController {
         return ResponseEntity.ok(recetaService.updateReceta(id, dto));
     }
 
+    @PatchMapping("/{id}/categorias")
+    public ResponseEntity<RecetaDTO> addRecetaToCategoria(@PathVariable Long id, @RequestParam Long idCategoria) {
+        return ResponseEntity.ok(recetaService.agregarACategoria(id, idCategoria));
+    }
+
+    @DeleteMapping("/{id}/categorias")
+    public ResponseEntity<RecetaDTO> removeRecetaFromCategoria(@PathVariable Long id, @RequestParam Long idCategoria) {
+        return ResponseEntity.ok(recetaService.eliminarDeCategoria(id, idCategoria));
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReceta(@PathVariable Long id) {
         recetaService.deleteRecetaById(id);
