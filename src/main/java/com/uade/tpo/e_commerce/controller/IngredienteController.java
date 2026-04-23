@@ -2,8 +2,6 @@ package com.uade.tpo.e_commerce.controller;
 
 import java.util.List;
 
-import com.uade.tpo.e_commerce.dto.IngredienteStockDTO;
-import com.uade.tpo.e_commerce.dto.IngredienteSaveDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.uade.tpo.e_commerce.dto.IngredienteDTO;
+import com.uade.tpo.e_commerce.dto.IngredienteSaveDTO;
+import com.uade.tpo.e_commerce.dto.IngredienteStockDTO;
 import com.uade.tpo.e_commerce.service.IngredienteService;
 
 
@@ -64,7 +64,6 @@ public class IngredienteController {
 
     @PutMapping("/{id}/stock")
     public ResponseEntity<IngredienteDTO> updateStock(@PathVariable Long id, @RequestBody IngredienteStockDTO stockDTO) {
-        // TODO: verificar que, si el ingrediente no existe, el dto sea null, o modificar la lógica
         IngredienteDTO ingrediente = ingredienteService.getIngredienteById(id);
         if (ingrediente == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(ingredienteService.updateStock(id, stockDTO.getStock()));

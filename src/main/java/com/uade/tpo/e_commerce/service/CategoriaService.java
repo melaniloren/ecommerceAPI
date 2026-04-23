@@ -2,13 +2,16 @@ package com.uade.tpo.e_commerce.service;
 
 import java.util.List;
 
-import com.uade.tpo.e_commerce.dto.*;
-import com.uade.tpo.e_commerce.model.Categoria;
-import com.uade.tpo.e_commerce.repository.CategoriaRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.uade.tpo.e_commerce.dto.CategoriaDTO;
+import com.uade.tpo.e_commerce.dto.CategoriaRequestDTO;
+import com.uade.tpo.e_commerce.dto.RecetaDTO;
+import com.uade.tpo.e_commerce.exception.CategoriaNotFoundException;
+import com.uade.tpo.e_commerce.model.Categoria;
+import com.uade.tpo.e_commerce.repository.CategoriaRepository;
 
 
 @Service
@@ -31,14 +34,14 @@ public class CategoriaService {
     @Transactional(readOnly = true)
     public CategoriaDTO getCategoriaById(Long id) {
         Categoria categoria = categoriaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Categoría no encontrada con id: " + id));
+                .orElseThrow(() -> new CategoriaNotFoundException("categoría", id));
         return toDTO(categoria);
     }
 
     @Transactional(readOnly = true)
     public List<RecetaDTO> getAllRecetasByCategoria(Long id) {
         Categoria categoria = categoriaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Categoría no encontrada con id: " + id));
+                .orElseThrow(() -> new CategoriaNotFoundException("categoría", id));
         return categoria.getRecetas()
                 .stream()
                 .map(recetaService::toDTO)
@@ -54,7 +57,7 @@ public class CategoriaService {
     @Transactional
     public CategoriaDTO updateCategoria(Long id, CategoriaRequestDTO dto) {
         Categoria existing = categoriaRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Categoría no encontrada con id: " + id));
+                .orElseThrow(() -> new CategoriaNotFoundException("categoría", id));
         existing.setNombre(dto.getNombre());
 
         return toDTO(categoriaRepository.save(existing));
@@ -63,7 +66,7 @@ public class CategoriaService {
     @Transactional
     public void deleteCategoriaById(Long id) {
         if (!categoriaRepository.existsById(id)) {
-            throw new EntityNotFoundException("Categoría no encontrada con id: " + id);
+            throw new CategoriaNotFoundException("categoría", id);
         }
         categoriaRepository.deleteById(id);
     }

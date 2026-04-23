@@ -12,6 +12,8 @@ import com.uade.tpo.e_commerce.dto.DetallePedidoDTO;
 import com.uade.tpo.e_commerce.model.DetallePedido;
 import com.uade.tpo.e_commerce.repository.DetallePedidoRepository;
 
+import com.uade.tpo.e_commerce.exception.DetallePedidoNotFoundException;
+
 
 @Service
 @Transactional
@@ -31,7 +33,7 @@ public class DetallePedidoService {
         DetallePedido detalle = detallePedidoRepository.findById(id).orElse(null);
 
         if (detalle == null) {
-            // throw new DetallePedidoNotFoundException("Detalle de pedido no encontrado con id: " + id);
+            throw new DetallePedidoNotFoundException("detalle de pedido ", id);
         }
 
         return new DetallePedidoDTO(
@@ -64,7 +66,7 @@ public class DetallePedidoService {
         DetallePedido detalle = detallePedidoRepository.findById(id).orElse(null);
 
         if (detalle == null) {
-            // throw new DetallePedidoNotFoundException("Detalle de pedido no encontrado con id: " + id);
+            throw new DetallePedidoNotFoundException("detalle de pedido ", id);
         }
 
         detalle.setCantidad(detallePedidoDTO.getCantidad());

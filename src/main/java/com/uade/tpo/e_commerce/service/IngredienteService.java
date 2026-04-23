@@ -12,7 +12,7 @@ import jakarta.transaction.Transactional;
 import com.uade.tpo.e_commerce.dto.IngredienteDTO;
 import com.uade.tpo.e_commerce.model.Ingrediente;
 import com.uade.tpo.e_commerce.repository.IngredienteRepository;
-
+import com.uade.tpo.e_commerce.exception.IngredienteNotFoundException;
 
 @Service
 @Transactional
@@ -37,8 +37,8 @@ public class IngredienteService {
         Ingrediente ingrediente = ingredienteRepository.findById(id).orElse(null);
 
         if (ingrediente == null) {
-            throw new RuntimeException("Ingrediente no encontrado con id: " + id);
-            // TODO: hacer las excepciones mas generalizadas
+            throw new IngredienteNotFoundException("ingrediente",id);
+            
         }
 
         return new IngredienteDTO(
@@ -51,7 +51,7 @@ public class IngredienteService {
 
     public void deleteIngredienteById(Long id) {
         if (!ingredienteRepository.existsById(id)) {
-            throw new RuntimeException("Ingrediente no encontrado con id: " + id);
+            throw new IngredienteNotFoundException("ingrediente",id);
         }
         ingredienteRepository.deleteById(id);
     }
@@ -76,8 +76,7 @@ public class IngredienteService {
         Ingrediente ingrediente = ingredienteRepository.findById(id).orElse(null);
 
         if (ingrediente == null) {
-           throw new RuntimeException("Ingrediente no encontrado con id: " + id);
-           // TODO: mejorar excepciones
+            throw new IngredienteNotFoundException("ingrediente",id);
         }
 
         ingrediente.setNombre(dto.getNombre());
@@ -96,7 +95,7 @@ public class IngredienteService {
     public IngredienteDTO updateStock(Long id, Integer stock) {
         Ingrediente ingrediente = ingredienteRepository.findById(id).orElse(null);
         if (ingrediente == null) {
-            throw new RuntimeException("Ingrediente no encontrado con id: " + id);
+            throw new IngredienteNotFoundException("ingrediente",id);
         }
         ingrediente.setStock(stock);
         Ingrediente actualizado = ingredienteRepository.save(ingrediente);

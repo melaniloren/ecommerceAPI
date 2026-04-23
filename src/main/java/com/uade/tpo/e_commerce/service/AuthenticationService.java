@@ -1,15 +1,19 @@
 package com.uade.tpo.e_commerce.service;
 
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.uade.tpo.e_commerce.dto.LoginRequest;
 import com.uade.tpo.e_commerce.dto.UsuarioNuevoDTO;
+import com.uade.tpo.e_commerce.exception.EmailYaRegistradoException;
 import com.uade.tpo.e_commerce.model.Rol;
 import com.uade.tpo.e_commerce.model.Usuario;
 import com.uade.tpo.e_commerce.repository.UsuarioRepository;
@@ -50,8 +54,8 @@ public class AuthenticationService {
      *                - email: email único del usuario (validado en PASO 1)
      *                - password: contraseña en texto plano que será encriptada
      * @return "User registered successfully" - mensaje de confirmación del registro exitoso
-     * @throws RuntimeException si el email ya existe en el sistema 
-     *         (TODO: implementar excepción personalizada EmailException y manejar con @ControllerAdvice)
+     * @throws EmailYaRegistradoException(request.getEmail()); si el email ya existe en el sistema 
+     *         
      */
     public String register(UsuarioNuevoDTO request) {
 
@@ -60,11 +64,10 @@ public class AuthenticationService {
         // Esto evita duplicados y garantiza que cada usuario tenga un identificador único.
         // Se utiliza el método existsByEmail() del repositorio para una consulta eficiente.
         if (usuarioRepository.existsByEmail(request.getEmail())) {
-            //TODO: ssanchez - crear exception personalizada EmailException y manejar con @ControllerAdvice
             // Si el email ya existe, se lanza una excepción. En futuras actualizaciones se debe
             // crear una excepción personalizada (EmailException) y capturarla en un @ControllerAdvice
             // para devolver respuestas HTTP consistentes y mensajes de error profesionales
-            throw new RuntimeException("El email ya existe en la base de datos");
+            throw new EmailYaRegistradoException(request.getEmail());
         }
 
         // ==================== PASO 2: CONSTRUCCIÓN DEL OBJETO USUARIO ====================

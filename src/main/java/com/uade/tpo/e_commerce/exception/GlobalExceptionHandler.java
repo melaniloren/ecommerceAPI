@@ -14,6 +14,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
+    @ExceptionHandler(EmailYaRegistradoException.class)
+    public ResponseEntity<String> manejarEmailYaRegistrado(EmailYaRegistradoException ex) {
+        // Utilizamos CONFLICT (409) porque la solicitud entra en conflicto con el estado actual del servidor (el email ya existe)
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
+    }
+
     @ExceptionHandler(PrecioNegativoException.class)
     public ResponseEntity<String> manejarPrecioNegativo(PrecioNegativoException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
