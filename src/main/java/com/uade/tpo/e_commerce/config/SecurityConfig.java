@@ -150,20 +150,6 @@ public class SecurityConfig {
                 )
 
                     
-
-                        
-                        
-
-                        // Rutas exclusivas para administradores
-                        //verifica que el usuario esté autenticado y tenga el rol ADMIN
-                        // TODO: habilitar o eliminar
-                        //.requestMatchers("/api/admin/**").hasRole(Rol.ADMIN.name())
-
-                        // Rutas de pedidos solo para usuarios autenticados
-                        // TODO: revisar esto, tal vez algún endpoint debería ser solo para admins
-                        //.requestMatchers("/api/pedidos/**").authenticated()
-
-
                         // Cualquier otra ruta requiere autenticación
                         // con esta linea abarca requiere que todos los endpoints esten autenticados
                         // no seía necesario post, put, delete /api/recetas , api/pedidos
@@ -180,7 +166,6 @@ public class SecurityConfig {
                         // Si el token es válido: El filtro establece la autenticación en el SecurityContext y llama a filterChain.doFilter(request, response) para pasar la solicitud al siguiente filtro y, finalmente, al controlador.
                         // Si el token falta o es inválido: El filtro rechaza la solicitud  o deja que la cadena continúe si el endpoint es público.
                         // Llegada al Controlador: Si el filtro permite el paso, la solicitud finalmente llega a su controlador.
-                        // TODO: habilitar esto cuando tengamos el login implementado
                         .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
