@@ -1,16 +1,17 @@
 package com.uade.tpo.e_commerce.security;
 
+import java.util.Date;
+import java.util.Set;
+
+import javax.crypto.SecretKey;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.Claims;
-// ...existing code...
-import javax.crypto.SecretKey;
-import java.util.Date;
-import java.util.Set;
 
 //tiene utilidades necesarias para implementar jwt
 //Instancia Única: Spring creará una sola instancia de la clase JwtUtil cuando se inicie la aplicación. 
@@ -99,8 +100,7 @@ public class JwtUtil {
      * @param token el token JWT a validar.
      * @return true si el token es válido, false en caso contrario.
      */
-    public boolean validateToken(String token) {
-        //TODO: ssanchez- crear exception personalizada y manerjar con GlobalExceptionHandler   
+    public boolean validateToken(String token) {  
         try {
             //este método es el que valida el token y extra la info del token: usarname, expiration, roles, etc.
             Claims claims = getClaims(token);
