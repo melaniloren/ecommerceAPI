@@ -13,6 +13,7 @@ import com.uade.tpo.e_commerce.exception.PedidoNotFoundException;
 import com.uade.tpo.e_commerce.model.Pedido;
 import com.uade.tpo.e_commerce.model.Usuario;
 import com.uade.tpo.e_commerce.repository.PedidoRepository;
+import com.uade.tpo.e_commerce.repository.UsuarioRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -20,13 +21,43 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class PedidoService {
  
-    private Long getCurrentUserId() {
-        return ((Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getIdUsuario();
-    }
+    // private Long getCurrentUserId() {
+    //     return ((Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getIdUsuario();
+    // }
 
     @Autowired
     private PedidoRepository pedidoRepository;
     
+// AÑADIMOS el repositorio de Usuario para poder buscarlo en la Base de Datos
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    // CREAMOS un método de ayuda para obtener el Usuario real
+    // private Usuario getUsuarioAutenticado() {
+    //     // Obtenemos el texto del token (suele ser el email o el username)
+    //     String usernameOEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        
+    //     // Buscamos el usuario en la base de datos. 
+    //     // IMPORTANTE: Si en tu UsuarioRepository el método se llama findByUsername, cámbialo aquí.
+    //     return usuarioRepository.findByEmail(usernameOEmail)
+    //             .orElseThrow(() -> new RuntimeException("Usuario autenticado no encontrado en la base de datos"));
+    // }
+
+private Usuario getUsuarioAutenticado() {
+        String usernameOEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        
+        // ¡Agregamos esto para ver qué está pasando en la consola de tu IDE!
+        System.out.println("🔍 Buscando en BD el usuario del token: " + usernameOEmail);
+        
+        return usuarioRepository.findByEmail(usernameOEmail) // <-- Ojo, revisa si debe ser findByUsername
+                .orElseThrow(() -> new RuntimeException("Usuario autenticado no encontrado en la base de datos"));
+    }
+
+    // ACTUALIZAMOS este método para usar nuestro nuevo ayudante
+    private Long getCurrentUserId() {
+        return getUsuarioAutenticado().getIdUsuario();
+    }
+
     public List<PedidoDTO> getAllPedidos() {
         return pedidoRepository.findAll()
                 .stream()
@@ -70,7 +101,8 @@ public class PedidoService {
                 .fecha(pedidoRequestDTO.getFecha())
                 .total(pedidoRequestDTO.getTotal())
                 .build();
-        pedido.setUsuario((Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+        // Asignamos el usuario real que obtuvimos de la BD
+        pedido.setUsuario(getUsuarioAutenticado());
 
         Pedido pedidoAdd = pedidoRepository.save(pedido);
 
