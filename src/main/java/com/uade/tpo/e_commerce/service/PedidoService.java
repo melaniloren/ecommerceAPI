@@ -46,8 +46,8 @@ public class PedidoService {
 private Usuario getUsuarioAutenticado() {
         String usernameOEmail = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         
-        // ¡Agregamos esto para ver qué está pasando en la consola de tu IDE!
-        System.out.println("🔍 Buscando en BD el usuario del token: " + usernameOEmail);
+        // Agregamos esto para ver que esta pasando en la consola 
+        System.out.println("Buscando en BD el usuario del token: " + usernameOEmail);
         
         return usuarioRepository.findByEmail(usernameOEmail) // <-- Ojo, revisa si debe ser findByUsername
                 .orElseThrow(() -> new RuntimeException("Usuario autenticado no encontrado en la base de datos"));
