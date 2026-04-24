@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.uade.tpo.e_commerce.dto.PedidoDTO;
 import com.uade.tpo.e_commerce.dto.PedidoRequestDTO;
-import com.uade.tpo.e_commerce.exception.PedidoNotFoundEception;
+import com.uade.tpo.e_commerce.exception.PedidoNotFoundException;
 import com.uade.tpo.e_commerce.model.Pedido;
 import com.uade.tpo.e_commerce.model.Usuario;
 import com.uade.tpo.e_commerce.repository.PedidoRepository;
@@ -43,7 +43,7 @@ public class PedidoService {
         Pedido pedido = pedidoRepository.findById(id).orElse(null);
 
         if (pedido == null) {
-           throw new PedidoNotFoundException("Pedido no encontrado con id: " + id);
+           throw new PedidoNotFoundException("pedido", id);
         }
 
         PedidoDTO pedidoDTO = new PedidoDTO(
@@ -59,7 +59,7 @@ public class PedidoService {
     public void deletePedidoById(Long id) {
         Pedido pedido = pedidoRepository.findById(id).orElseThrow(() -> new RuntimeException("Pedido not found"));
         if (!pedido.getUsuario().getIdUsuario().equals(getCurrentUserId())) {
-            throw new PedidoNotFoundEception("pedido", id);
+            throw new PedidoNotFoundException("pedido", id);
         }
         pedidoRepository.delete(pedido);
     }
@@ -82,9 +82,9 @@ public class PedidoService {
     }
 
     public PedidoDTO updatePedido(Long id, PedidoRequestDTO pedidoRequestDTO) {
-        Pedido pedido = pedidoRepository.findById(id).orElseThrow(() -> new PedidoNotFoundEception( "pedido", id));
+        Pedido pedido = pedidoRepository.findById(id).orElseThrow(() -> new PedidoNotFoundException( "pedido", id));
         if (!pedido.getUsuario().getIdUsuario().equals(getCurrentUserId())) {
-            throw new PedidoNotFoundEception( "pedido", id);
+            throw new PedidoNotFoundException( "pedido", id);
         }
 
         pedido.setFecha(pedidoRequestDTO.getFecha());
