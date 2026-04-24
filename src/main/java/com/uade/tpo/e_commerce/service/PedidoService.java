@@ -43,7 +43,7 @@ public class PedidoService {
         Pedido pedido = pedidoRepository.findById(id).orElse(null);
 
         if (pedido == null) {
-           // throw new PedidoNotFoundException("Pedido no encontrado con id: " + id);
+           throw new PedidoNotFoundException("Pedido no encontrado con id: " + id);
         }
 
         PedidoDTO pedidoDTO = new PedidoDTO(
