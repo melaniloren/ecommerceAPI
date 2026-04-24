@@ -13,8 +13,6 @@ import lombok.*;
 @Entity
 @Data
 @Builder
-@Getter
-@Setter
 @Table(name = "detalle_pedidos")
 @AllArgsConstructor
 @NoArgsConstructor
