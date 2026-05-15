@@ -5,4 +5,7 @@ public class UsuarioNotFoundException extends RecursoNotFoundException {
         super(TipoRecurso,id);
     }
 
+    public UsuarioNotFoundException(String email) {
+        super("usuario",email);
+    }
 }

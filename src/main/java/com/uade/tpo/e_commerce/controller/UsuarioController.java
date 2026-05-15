@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,6 +46,13 @@ public class UsuarioController {
         usuarioService.deleteUsuarioById(id);
     }
 
+    // http://localhost:8080/api/usuarios/perfil
+    @GetMapping("/perfil")
+    public ResponseEntity<UsuarioDTO> getPerfil(@AuthenticationPrincipal String email) {
+        UsuarioDTO usuario = usuarioService.getPerfil(email);
+        return new ResponseEntity<>(usuario,HttpStatus.OK);
+    }
+
     @PostMapping
     public ResponseEntity<UsuarioDTO> createUsuario(@RequestBody UsuarioNuevoDTO usuarioDTO) {
         UsuarioDTO created = usuarioService.createUsuario(usuarioDTO);
@@ -56,9 +64,6 @@ public class UsuarioController {
         UsuarioDTO usuarioActualizado = usuarioService.updateUsuario(id, usuarioUpdateDTO);
         return new ResponseEntity<>(usuarioActualizado, HttpStatus.OK);
     }
-    
-    
-
 
 }
 

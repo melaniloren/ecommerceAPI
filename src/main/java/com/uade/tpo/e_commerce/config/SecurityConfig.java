@@ -72,6 +72,7 @@ public class SecurityConfig {
                         // GET autenticados
                         .requestMatchers(HttpMethod.GET, "/api/pedidos/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/detalle-pedidos/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/usuarios/perfil").authenticated()
 
                         // POST
                         .requestMatchers(HttpMethod.POST, "/api/recetas")

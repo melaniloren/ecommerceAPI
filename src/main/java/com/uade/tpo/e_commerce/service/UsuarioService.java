@@ -89,5 +89,16 @@ public class UsuarioService {
         usuario.setEmail(usuarioUpdateDTO.getEmail());
         return new UsuarioDTO(usuario.getIdUsuario(), usuario.getNombre(), usuario.getApellido(), usuario.getEmail());
     }
-    
+
+
+    public UsuarioDTO getPerfil(String email) {
+        Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new UsuarioNotFoundException(email));
+        return new UsuarioDTO(
+                usuario.getIdUsuario(),
+                usuario.getNombre(),
+                usuario.getApellido(),
+                usuario.getEmail()
+        );
+    }
 }
