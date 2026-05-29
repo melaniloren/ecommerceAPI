@@ -12,6 +12,7 @@ import com.uade.tpo.e_commerce.service.AuthenticationService;
 
 import lombok.RequiredArgsConstructor;
 
+
 @RestController
 @RequestMapping("/api/auth")
 //anotación de Lombok que genera automáticamente un constructor que incluye todos los campos marcados como final, es igual que usar @autowired 
