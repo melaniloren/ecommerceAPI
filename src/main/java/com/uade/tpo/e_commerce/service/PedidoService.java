@@ -74,7 +74,7 @@ private Usuario getUsuarioAutenticado() {
         Pedido pedido = pedidoRepository.findById(id).orElse(null);
 
         if (pedido == null) {
-           throw new PedidoNotFoundException("pedido", id);
+           throw new PedidoNotFoundException(id);
         }
 
         PedidoDTO pedidoDTO = new PedidoDTO(
@@ -90,7 +90,7 @@ private Usuario getUsuarioAutenticado() {
     public void deletePedidoById(Long id) {
         Pedido pedido = pedidoRepository.findById(id).orElseThrow(() -> new RuntimeException("Pedido not found"));
         if (!pedido.getUsuario().getIdUsuario().equals(getCurrentUserId())) {
-            throw new PedidoNotFoundException("pedido", id);
+            throw new PedidoNotFoundException(id);
         }
         pedidoRepository.delete(pedido);
     }
@@ -114,9 +114,9 @@ private Usuario getUsuarioAutenticado() {
     }
 
     public PedidoDTO updatePedido(Long id, PedidoRequestDTO pedidoRequestDTO) {
-        Pedido pedido = pedidoRepository.findById(id).orElseThrow(() -> new PedidoNotFoundException( "pedido", id));
+        Pedido pedido = pedidoRepository.findById(id).orElseThrow(() -> new PedidoNotFoundException(id));
         if (!pedido.getUsuario().getIdUsuario().equals(getCurrentUserId())) {
-            throw new PedidoNotFoundException( "pedido", id);
+            throw new PedidoNotFoundException(id);
         }
 
         pedido.setFecha(pedidoRequestDTO.getFecha());

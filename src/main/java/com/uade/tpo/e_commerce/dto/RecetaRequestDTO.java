@@ -1,14 +1,11 @@
 package com.uade.tpo.e_commerce.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class RecetaRequestDTO {
     private String nombre;
@@ -16,11 +13,11 @@ public class RecetaRequestDTO {
     private Double precio;
     private List<Long> categorias;
 
-    public RecetaRequestDTO(String nombre, String descripcion, Double precio) {
+    public RecetaRequestDTO(String nombre, String descripcion, Double precio, List<Long> categorias) {
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.precio = precio;
-        this.categorias = new ArrayList<>();
+        this.categorias = List.copyOf(categorias);
     }
 
 }

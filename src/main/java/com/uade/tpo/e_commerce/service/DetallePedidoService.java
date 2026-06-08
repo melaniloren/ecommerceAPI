@@ -33,7 +33,7 @@ public class DetallePedidoService {
         DetallePedido detalle = detallePedidoRepository.findById(id).orElse(null);
 
         if (detalle == null) {
-            throw new DetallePedidoNotFoundException("detalle de pedido ", id);
+            throw new DetallePedidoNotFoundException(id);
         }
 
         return new DetallePedidoDTO(
@@ -66,7 +66,7 @@ public class DetallePedidoService {
         DetallePedido detalle = detallePedidoRepository.findById(id).orElse(null);
 
         if (detalle == null) {
-            throw new DetallePedidoNotFoundException("detalle de pedido ", id);
+            throw new DetallePedidoNotFoundException(id);
         }
 
         detalle.setCantidad(detallePedidoDTO.getCantidad());

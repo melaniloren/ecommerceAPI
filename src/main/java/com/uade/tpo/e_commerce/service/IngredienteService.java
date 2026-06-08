@@ -37,7 +37,7 @@ public class IngredienteService {
         Ingrediente ingrediente = ingredienteRepository.findById(id).orElse(null);
 
         if (ingrediente == null) {
-            throw new IngredienteNotFoundException("ingrediente",id);
+            throw new IngredienteNotFoundException(id);
             
         }
 
@@ -51,7 +51,7 @@ public class IngredienteService {
 
     public void deleteIngredienteById(Long id) {
         if (!ingredienteRepository.existsById(id)) {
-            throw new IngredienteNotFoundException("ingrediente",id);
+            throw new IngredienteNotFoundException(id);
         }
         ingredienteRepository.deleteById(id);
     }
@@ -76,7 +76,7 @@ public class IngredienteService {
         Ingrediente ingrediente = ingredienteRepository.findById(id).orElse(null);
 
         if (ingrediente == null) {
-            throw new IngredienteNotFoundException("ingrediente",id);
+            throw new IngredienteNotFoundException(id);
         }
 
         ingrediente.setNombre(dto.getNombre());
@@ -95,7 +95,7 @@ public class IngredienteService {
     public IngredienteDTO updateStock(Long id, Integer stock) {
         Ingrediente ingrediente = ingredienteRepository.findById(id).orElse(null);
         if (ingrediente == null) {
-            throw new IngredienteNotFoundException("ingrediente",id);
+            throw new IngredienteNotFoundException(id);
         }
         ingrediente.setStock(stock);
         Ingrediente actualizado = ingredienteRepository.save(ingrediente);

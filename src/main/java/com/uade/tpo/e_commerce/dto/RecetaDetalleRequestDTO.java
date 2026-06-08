@@ -3,15 +3,13 @@ package com.uade.tpo.e_commerce.dto;
 import lombok.Data;
 
 @Data
-public class RecetaDetalleDTO {
-    private Long idRecetaDetalle;
+public class RecetaDetalleRequestDTO {
     private int cantidad;
     private String unidad; //kg, litros, etc
     private Long idReceta;
     private Long idIngrediente;
 
-    public RecetaDetalleDTO(Long id, Long idReceta, Long idIngrediente, int cantidad, String unidad) {
-        this.idRecetaDetalle = id;
+    public RecetaDetalleRequestDTO(Long idReceta, Long idIngrediente, int cantidad, String unidad) {
         this.idReceta = idReceta;
         this.idIngrediente = idIngrediente;
         this.cantidad = cantidad;

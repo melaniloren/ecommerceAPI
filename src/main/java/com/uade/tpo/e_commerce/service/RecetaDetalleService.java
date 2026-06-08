@@ -3,13 +3,20 @@ package com.uade.tpo.e_commerce.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.uade.tpo.e_commerce.dto.RecetaDetalleRequestDTO;
+import com.uade.tpo.e_commerce.model.Ingrediente;
+import com.uade.tpo.e_commerce.model.Receta;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.uade.tpo.e_commerce.dto.RecetaDetalleDTO;
 import com.uade.tpo.e_commerce.exception.RecetaNotFoundException;
+import com.uade.tpo.e_commerce.exception.RecetaDetalleNotFoundException;
+import com.uade.tpo.e_commerce.exception.IngredienteNotFoundException;
 import com.uade.tpo.e_commerce.model.RecetaDetalle;
+import com.uade.tpo.e_commerce.repository.RecetaRepository;
 import com.uade.tpo.e_commerce.repository.RecetaDetalleRepository;
+import com.uade.tpo.e_commerce.repository.IngredienteRepository;
 
 import jakarta.transaction.Transactional;
 
@@ -18,16 +25,23 @@ import jakarta.transaction.Transactional;
 public class RecetaDetalleService {
 
     @Autowired
+    private RecetaRepository recetaRepository;
+
+    @Autowired
     private RecetaDetalleRepository recetaDetalleRepository;
+
+    @Autowired
+    private IngredienteRepository ingredienteRepository;
 
     public List<RecetaDetalleDTO> getAllRecetaDetalles() {
         return recetaDetalleRepository.findAll()
                 .stream()
                 .map(r -> new RecetaDetalleDTO(
                         r.getIdRecetaDetalle(),
+                        r.getReceta().getIdReceta(),
+                        r.getIngrediente().getIdIngrediente(),
                         r.getCantidad(),
-                        r.getUnidad()
-                ))
+                        r.getUnidad()))
                 .collect(Collectors.toList());
     }
 
@@ -35,24 +49,41 @@ public class RecetaDetalleService {
         RecetaDetalle recetaDetalle = recetaDetalleRepository.findById(id).orElse(null);
 
         if (recetaDetalle == null) {
-            throw new RecetaNotFoundException("receta detalle",id);
+            throw new RecetaDetalleNotFoundException(id);
         }
 
         return new RecetaDetalleDTO(
                 recetaDetalle.getIdRecetaDetalle(),
+                recetaDetalle.getReceta().getIdReceta(),
+                recetaDetalle.getIngrediente().getIdIngrediente(),
                 recetaDetalle.getCantidad(),
-                recetaDetalle.getUnidad()
-        );
+                recetaDetalle.getUnidad());
     }
 
-    public RecetaDetalleDTO saveRecetaDetalle(RecetaDetalleDTO dto) {
-
-        // Validación simple
+    public RecetaDetalleDTO saveRecetaDetalle(RecetaDetalleRequestDTO dto) {
         if (dto.getCantidad() <= 0) {
             throw new IllegalArgumentException("La cantidad debe ser mayor a 0");
         }
+        if (dto.getIdReceta() == null) {
+            throw new IllegalArgumentException("El id de la receta no puede ser nulo");
+        }
+        if (dto.getIdIngrediente() == null) {
+            throw new IllegalArgumentException("El id del ingrediente no puede ser nulo");
+        }
+
+        Receta receta = recetaRepository.findById(dto.getIdReceta()).orElse(null);
+        if (receta == null) {
+            throw new RecetaNotFoundException(dto.getIdReceta());
+        }
+
+        Ingrediente ingrediente = ingredienteRepository.findById(dto.getIdIngrediente()).orElse(null);
+        if (ingrediente == null) {
+            throw new IngredienteNotFoundException(dto.getIdIngrediente());
+        }
 
         RecetaDetalle recetaDetalle = RecetaDetalle.builder()
+                .receta(receta)
+                .ingrediente(ingrediente)
                 .cantidad(dto.getCantidad())
                 .unidad(dto.getUnidad())
                 .build();
@@ -61,22 +92,35 @@ public class RecetaDetalleService {
 
         return new RecetaDetalleDTO(
                 guardado.getIdRecetaDetalle(),
+                guardado.getReceta().getIdReceta(),
+                guardado.getIngrediente().getIdIngrediente(),
                 guardado.getCantidad(),
-                guardado.getUnidad()
-        );
+                guardado.getUnidad());
     }
 
-    public RecetaDetalleDTO updateRecetaDetalle(Long id, RecetaDetalleDTO dto) {
+    public RecetaDetalleDTO updateRecetaDetalle(Long id, RecetaDetalleRequestDTO dto) {
         RecetaDetalle recetaDetalle = recetaDetalleRepository.findById(id).orElse(null);
 
         if (recetaDetalle == null) {
-            throw new RecetaNotFoundException("receta detalle",id);
+            throw new RecetaDetalleNotFoundException(id);
+        }
+
+        Receta receta = recetaRepository.findById(dto.getIdReceta()).orElse(null);
+        if (receta == null) {
+            throw new RecetaNotFoundException(dto.getIdReceta());
+        }
+
+        Ingrediente ingrediente = ingredienteRepository.findById(dto.getIdIngrediente()).orElse(null);
+        if (ingrediente == null) {
+            throw new IngredienteNotFoundException(dto.getIdIngrediente());
         }
 
         if (dto.getCantidad() <= 0) {
             throw new IllegalArgumentException("La cantidad debe ser mayor a 0");
         }
 
+        recetaDetalle.setReceta(receta);
+        recetaDetalle.setIngrediente(ingrediente);
         recetaDetalle.setCantidad(dto.getCantidad());
         recetaDetalle.setUnidad(dto.getUnidad());
 
@@ -84,19 +128,19 @@ public class RecetaDetalleService {
 
         return new RecetaDetalleDTO(
                 actualizado.getIdRecetaDetalle(),
+                actualizado.getReceta().getIdReceta(),
+                actualizado.getIngrediente().getIdIngrediente(),
                 actualizado.getCantidad(),
-                actualizado.getUnidad()
-        );
+                actualizado.getUnidad());
     }
 
     public void deleteRecetaDetalleById(Long id) {
         RecetaDetalle recetaDetalle = recetaDetalleRepository.findById(id).orElse(null);
 
         if (recetaDetalle == null) {
-            throw new RecetaNotFoundException("receta detalle",id);
+            throw new RecetaDetalleNotFoundException(id);
         }
 
         recetaDetalleRepository.deleteById(id);
     }
 }
-

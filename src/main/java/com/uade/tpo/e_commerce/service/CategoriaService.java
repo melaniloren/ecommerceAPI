@@ -34,14 +34,14 @@ public class CategoriaService {
     @Transactional(readOnly = true)
     public CategoriaDTO getCategoriaById(Long id) {
         Categoria categoria = categoriaRepository.findById(id)
-                .orElseThrow(() -> new CategoriaNotFoundException("categoría", id));
+                .orElseThrow(() -> new CategoriaNotFoundException(id));
         return toDTO(categoria);
     }
 
     @Transactional(readOnly = true)
     public List<RecetaDTO> getAllRecetasByCategoria(Long id) {
         Categoria categoria = categoriaRepository.findById(id)
-                .orElseThrow(() -> new CategoriaNotFoundException("categoría", id));
+                .orElseThrow(() -> new CategoriaNotFoundException(id));
         return categoria.getRecetas()
                 .stream()
                 .map(recetaService::toDTO)
@@ -57,7 +57,7 @@ public class CategoriaService {
     @Transactional
     public CategoriaDTO updateCategoria(Long id, CategoriaRequestDTO dto) {
         Categoria existing = categoriaRepository.findById(id)
-                .orElseThrow(() -> new CategoriaNotFoundException("categoría", id));
+                .orElseThrow(() -> new CategoriaNotFoundException(id));
         existing.setNombre(dto.getNombre());
 
         return toDTO(categoriaRepository.save(existing));
@@ -66,7 +66,7 @@ public class CategoriaService {
     @Transactional
     public void deleteCategoriaById(Long id) {
         if (!categoriaRepository.existsById(id)) {
-            throw new CategoriaNotFoundException("categoría", id);
+            throw new CategoriaNotFoundException(id);
         }
         categoriaRepository.deleteById(id);
     }
