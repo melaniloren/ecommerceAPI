@@ -73,6 +73,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/pedidos/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/detalle-pedidos/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/usuarios/perfil").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/carritos/**").authenticated()
 
                         // POST
                         .requestMatchers(HttpMethod.POST, "/api/recetas")
@@ -93,6 +94,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/api/categorias/**")
                             .hasRole(Rol.ADMIN.name())
 
+                        .requestMatchers(HttpMethod.POST, "/api/carritos/**" ).authenticated()
+
                         // PUT / PATCH
                         .requestMatchers(HttpMethod.PUT, "/api/recetas/**")
                             .hasRole(Rol.ADMIN.name())
@@ -112,6 +115,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/categorias/**")
                             .hasRole(Rol.ADMIN.name())
 
+                        .requestMatchers(HttpMethod.PATCH, "/api/carritos/**").authenticated()
+
                         // DELETE
                         .requestMatchers(HttpMethod.DELETE, "/api/recetas/**")
                             .hasRole(Rol.ADMIN.name())
@@ -130,6 +135,15 @@ public class SecurityConfig {
 
                         .requestMatchers(HttpMethod.DELETE, "/api/categorias/**")
                             .hasRole(Rol.ADMIN.name())
+
+                        // En Spring Security, gana la primera regla que hace match.
+                        //No importa cuál aparezca “más específica” si esa especificidad
+                        // no está definida antes: el orden importa mucho.
+                        // Regla práctica:poner primero las rutas más específicas y después las más generales.
+
+                        .requestMatchers(HttpMethod.DELETE, "/api/carritos/vaciar/**").authenticated()
+
+                        .requestMatchers(HttpMethod.DELETE, "/api/carritos/**").hasRole(Rol.ADMIN.name())
 
                         // USUARIOS
                         .requestMatchers(HttpMethod.GET, "/api/usuarios/**")

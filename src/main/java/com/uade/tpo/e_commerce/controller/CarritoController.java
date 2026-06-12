@@ -92,7 +92,7 @@ public class CarritoController {
      * Vaciar carrito (eliminar todas las recetas)
      * DELETE /api/carritos/{id}/vaciar
      */
-    @DeleteMapping("/{id}/vaciar")
+    @DeleteMapping("/vaciar/{id}")
     public ResponseEntity<Void> vaciarCarrito(@PathVariable Long id) {
         carritoService.vaciarCarrito(id);
         return ResponseEntity.noContent().build();
