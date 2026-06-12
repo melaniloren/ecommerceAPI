@@ -1,5 +1,6 @@
 package com.uade.tpo.e_commerce.exception;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -8,7 +9,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Este único método atrapará UsuarioNotFound, RecetaNotFound, EmailNotFound, etc.
     @ExceptionHandler(RecursoNotFoundException.class)
     public ResponseEntity<String> manejarRecursosNoEncontrados(RecursoNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
@@ -16,7 +16,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(EmailYaRegistradoException.class)
     public ResponseEntity<String> manejarEmailYaRegistrado(EmailYaRegistradoException ex) {
-        // Utilizamos CONFLICT (409) porque la solicitud entra en conflicto con el estado actual del servidor (el email ya existe)
         return ResponseEntity.status(HttpStatus.CONFLICT).body(ex.getMessage());
     }
 
@@ -28,6 +27,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> manejarArgumentoInvalido(IllegalArgumentException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    // Maneja EntityNotFoundException (jakarta.persistence) como 404
+    // Esto es necesario para que el frontend pueda detectar cuando el carrito
+    // no existe y crearlo automáticamente (el CarritoService lanza esta excepción).
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<String> manejarEntidadNoEncontrada(EntityNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

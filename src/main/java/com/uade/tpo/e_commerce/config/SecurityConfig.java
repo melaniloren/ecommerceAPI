@@ -74,6 +74,15 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/detalle-pedidos/**").authenticated()
                         .requestMatchers(HttpMethod.GET, "/api/usuarios/perfil").authenticated()
 
+
+                        // CARRITOS (usuario autenticado)
+                        .requestMatchers(HttpMethod.GET, "/api/carritos/usuario/**").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/carritos/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/carritos/**").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/carritos").authenticated()
+                        .requestMatchers(HttpMethod.PATCH, "/api/carritos/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/carritos/**").authenticated()
+
                         // POST
                         .requestMatchers(HttpMethod.POST, "/api/recetas")
                             .hasRole(Rol.ADMIN.name())
