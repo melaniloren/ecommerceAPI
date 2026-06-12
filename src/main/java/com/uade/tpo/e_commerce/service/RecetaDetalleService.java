@@ -143,4 +143,13 @@ public class RecetaDetalleService {
 
         recetaDetalleRepository.deleteById(id);
     }
+
+    public RecetaDetalleDTO toDTO(RecetaDetalle recetaDetalle) {
+        return new RecetaDetalleDTO(
+                recetaDetalle.getIdRecetaDetalle(),
+                recetaDetalle.getReceta().getIdReceta(),
+                recetaDetalle.getIngrediente().getIdIngrediente(),
+                recetaDetalle.getCantidad(),
+                recetaDetalle.getUnidad());
+    }
 }
