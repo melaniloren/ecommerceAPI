@@ -18,6 +18,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,14 +48,13 @@ public class CarritoService {
         Usuario usuario = usuarioRepository.findById(dto.getUsuarioId())
                 .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado"));
 
-        // Verificar si el usuario ya tiene carrito
         carritoRepository.findByUsuarioIdUsuario(usuario.getIdUsuario()).ifPresent(carrito -> {
             throw new IllegalArgumentException("El usuario ya tiene un carrito activo");
         });
 
         Carrito carrito = Carrito.builder()
                 .usuario(usuario)
-                .detalles(List.of())
+                .detalles(new ArrayList<>())
                 .build();
 
         Carrito guardado = carritoRepository.save(carrito);
@@ -99,17 +99,14 @@ public class CarritoService {
         Receta receta = recetaRepository.findById(dto.getRecetaId())
                 .orElseThrow(() -> new RecetaNotFoundException(dto.getRecetaId()));
 
-        // Verificar si la receta ya está en el carrito
         var detalleExistente = carritoDetalleRepository.findByCarritoIdCarritoAndRecetaIdReceta(carritoId, dto.getRecetaId());
 
         if (detalleExistente.isPresent()) {
-            // Si ya existe, incrementar cantidad
             CarritoDetalle detalle = detalleExistente.get();
             detalle.setCantidad(detalle.getCantidad() + dto.getCantidad());
             detalle.setPrecioTotal(detalle.getPrecioTotal() + (receta.getPrecioReceta() * dto.getCantidad()));
             carritoDetalleRepository.save(detalle);
         } else {
-            // Si no existe, crear nuevo
             CarritoDetalle detalle = CarritoDetalle.builder()
                     .carrito(carrito)
                     .receta(receta)
@@ -119,15 +116,19 @@ public class CarritoService {
             carritoDetalleRepository.save(detalle);
         }
 
-        // Recargar para obtener los detalles actualizados
         Carrito carritoActualizado = carritoRepository.findById(carritoId).orElseThrow();
         return toDTO(carritoActualizado);
     }
 
     /**
-     * Elimina una receta del carrito
+     * Elimina una receta del carrito.
+     * Se quita el detalle de la colección del Carrito para que JPA/orphanRemoval
+     * lo borre correctamente y no queden inconsistencias en el contexto de persistencia.
      */
     public CarritoDTO eliminarRecetaDelCarrito(Long carritoId, Long carritoDetalleId) {
+        Carrito carrito = carritoRepository.findById(carritoId)
+                .orElseThrow(() -> new EntityNotFoundException("Carrito no encontrado"));
+
         CarritoDetalle detalle = carritoDetalleRepository.findById(carritoDetalleId)
                 .orElseThrow(() -> new EntityNotFoundException("Detalle de carrito no encontrado"));
 
@@ -135,10 +136,12 @@ public class CarritoService {
             throw new IllegalArgumentException("El detalle no pertenece al carrito especificado");
         }
 
-        carritoDetalleRepository.delete(detalle);
+        // Quitar de la colección del padre para que orphanRemoval funcione correctamente
+        carrito.getDetalles().remove(detalle);
+        carritoRepository.save(carrito);
 
-        Carrito carrito = carritoRepository.findById(carritoId).orElseThrow();
-        return toDTO(carrito);
+        Carrito carritoActualizado = carritoRepository.findById(carritoId).orElseThrow();
+        return toDTO(carritoActualizado);
     }
 
     /**
@@ -164,11 +167,16 @@ public class CarritoService {
     }
 
     /**
-     * Vacía el carrito eliminando todos sus detalles
+     * Vacía el carrito eliminando todos sus detalles.
+     * Se usa deleteAllInBatch para garantizar que los registros se borren
+     * en la BD antes de que JPA intente sincronizar el estado de la colección.
      */
     public void vaciarCarrito(Long carritoId) {
         Carrito carrito = carritoRepository.findById(carritoId)
                 .orElseThrow(() -> new EntityNotFoundException("Carrito no encontrado"));
+
+        List<CarritoDetalle> detalles = new ArrayList<>(carrito.getDetalles());
+        carritoDetalleRepository.deleteAll(detalles);
         carrito.getDetalles().clear();
         carritoRepository.save(carrito);
     }
@@ -216,4 +224,3 @@ public class CarritoService {
                 .build();
     }
 }
-
