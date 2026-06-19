@@ -22,6 +22,13 @@ public class RecetaDetalleController {
         return recetaDetalleService.getAllRecetaDetalles();
     }
 
+    // http://localhost:8080/api/receta-detalles/receta/{idReceta}
+    // Devuelve todos los detalles (ingredientes) de una receta concreta.
+    @GetMapping("/receta/{idReceta}")
+    public List<RecetaDetalleDTO> getRecetaDetallesByReceta(@PathVariable Long idReceta) {
+        return recetaDetalleService.getRecetaDetallesByReceta(idReceta);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<RecetaDetalleDTO> getRecetaDetalleById(@PathVariable Long id) {
         RecetaDetalleDTO detalle = recetaDetalleService.getRecetaDetalleById(id);

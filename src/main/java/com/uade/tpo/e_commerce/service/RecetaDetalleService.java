@@ -45,6 +45,13 @@ public class RecetaDetalleService {
                 .collect(Collectors.toList());
     }
 
+    public List<RecetaDetalleDTO> getRecetaDetallesByReceta(Long idReceta) {
+        return recetaDetalleRepository.findByReceta_IdReceta(idReceta)
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
     public RecetaDetalleDTO getRecetaDetalleById(Long id) {
         RecetaDetalle recetaDetalle = recetaDetalleRepository.findById(id).orElse(null);
 
