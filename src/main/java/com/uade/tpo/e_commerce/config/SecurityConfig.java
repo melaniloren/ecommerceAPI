@@ -56,11 +56,20 @@ public class SecurityConfig {
 
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                // CSRF deshabilitado: hoy autenticamos con cookie SameSite=Strict, lo que
+                // ya mitiga CSRF en este entorno. En producción con dominios cruzados
+                // (front y back en orígenes distintos) habría que habilitar CSRF con token
+                // (p. ej. CookieCsrfTokenRepository) ya que SameSite deja de proteger.
                 .csrf(csrf -> csrf.disable())
 
                 .authorizeHttpRequests(auth -> auth
 
                         // AUTH
+                        // Reglas específicas ANTES del permitAll genérico (gana la primera que matchea).
+                        // /me requiere estar autenticado: el front lo usa para rehidratar Redux tras F5.
+                        .requestMatchers(HttpMethod.GET, "/api/auth/me").authenticated()
+                        // logout: permitAll para que no falle aunque la sesión ya no sea válida.
+                        .requestMatchers(HttpMethod.POST, "/api/auth/logout").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
 
                         // GET públicos

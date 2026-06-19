@@ -9,6 +9,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -31,15 +32,22 @@ public class JwtFilter extends OncePerRequestFilter {
     
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // 1. Obtiene el encabezado "Authorization" de la petición.
-        // en header se almacen esto ej: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJycGVyZXpAZ21haWwuY29tIiwicm9sZXMiOiJST0xFX1VTRVIiLCJpYXQiOjE3NjEwMDc4MzIsImV4cCI6MTc2MTA5NDIzMn0.FcLd28t-inYFaz7Sbe4slGBafJoqZtChCszmsckCLB
-        String header = request.getHeader("Authorization");
+        // 1. Obtiene el token JWT desde la cookie "token" (antes se leía del header
+        //    "Authorization: Bearer ..."). Ahora el token viaja como cookie HttpOnly,
+        //    así que recorremos las cookies de la request buscando la llamada "token".
+        String token = null;
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("token".equals(cookie.getName())) {
+                    token = cookie.getValue();
+                    break;
+                }
+            }
+        }
 
-        // 2. Verifica si el encabezado existe y si comienza con "Bearer ".
-        if (header != null && header.startsWith("Bearer ")) {
-            //extrae la parte del JWT de la cabecera de autorización, eliminando el prefijo "Bearer ".
-            // ej token: eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJycGVyZXpAZ21haWwuY29tIiwicm9sZXMiOiJST0xFX1VTRVIiLCJpYXQiOjE3NjEwMDc4MzIsImV4cCI6MTc2MTA5NDIzMn0.FcLd28t-inYFaz7Sbe4slGBafJoqZtChCszmsckCLBU
-            String token = header.substring(7);
+        // 2. Verifica si se encontró el token en la cookie.
+        if (token != null && !token.isEmpty()) {
             // 4. Valida el token usando `jwtUtil.validateToken()`.
             if (jwtUtil.validateToken(token)) {
                 // 5. Si el token es válido, extrae el nombre de usuario y los roles del token.
