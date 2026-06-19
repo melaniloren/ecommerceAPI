@@ -52,6 +52,22 @@ public class RecetaDetalleService {
                 .collect(Collectors.toList());
     }
 
+    public List<RecetaDetalleDTO> replaceRecetaDetallesByReceta(Long idReceta, List<RecetaDetalleRequestDTO> detalles) {
+        if (!recetaRepository.existsById(idReceta)) {
+            throw new RecetaNotFoundException(idReceta);
+        }
+
+        List<RecetaDetalle> actuales = recetaDetalleRepository.findByReceta_IdReceta(idReceta);
+        recetaDetalleRepository.deleteAll(actuales);
+
+        return detalles.stream()
+                .map(detalle -> {
+                    detalle.setIdReceta(idReceta);
+                    return saveRecetaDetalle(detalle);
+                })
+                .collect(Collectors.toList());
+    }
+
     public RecetaDetalleDTO getRecetaDetalleById(Long id) {
         RecetaDetalle recetaDetalle = recetaDetalleRepository.findById(id).orElse(null);
 

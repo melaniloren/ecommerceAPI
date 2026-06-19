@@ -29,6 +29,14 @@ public class RecetaDetalleController {
         return recetaDetalleService.getRecetaDetallesByReceta(idReceta);
     }
 
+    @PutMapping("/receta/{idReceta}")
+    public List<RecetaDetalleDTO> replaceRecetaDetallesByReceta(
+            @PathVariable Long idReceta,
+            @RequestBody List<RecetaDetalleRequestDTO> detalles
+    ) {
+        return recetaDetalleService.replaceRecetaDetallesByReceta(idReceta, detalles);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<RecetaDetalleDTO> getRecetaDetalleById(@PathVariable Long id) {
         RecetaDetalleDTO detalle = recetaDetalleService.getRecetaDetalleById(id);

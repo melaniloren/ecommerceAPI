@@ -50,6 +50,7 @@ public class RecetaService {
         Receta receta = Receta.builder()
                 .nombre(dto.getNombre())
                 .descripcion(dto.getDescripcion())
+                .imagen(dto.getImagen())
                 .precioReceta(dto.getPrecio())
                 .categorias(categorias)
                 .build();
@@ -67,6 +68,7 @@ public class RecetaService {
 
         receta.setNombre(dto.getNombre());
         receta.setDescripcion(dto.getDescripcion());
+        receta.setImagen(dto.getImagen());
         receta.setPrecioReceta(dto.getPrecio());
         receta.setCategorias(categorias);
 
@@ -120,6 +122,7 @@ public class RecetaService {
                 receta.getIdReceta(),
                 receta.getNombre(),
                 receta.getDescripcion(),
+                receta.getImagen(),
                 receta.getPrecioReceta(),
                 receta.getCategorias().stream().map(categoriaService::toDTO).collect(Collectors.toList())
         );

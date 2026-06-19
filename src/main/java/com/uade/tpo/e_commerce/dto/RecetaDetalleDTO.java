@@ -18,4 +18,12 @@ public class RecetaDetalleDTO {
         this.unidad = unidad;
     }
 
+    public Long getRecetaId() {
+        return idReceta;
+    }
+
+    public Long getIngredienteId() {
+        return idIngrediente;
+    }
+
 }

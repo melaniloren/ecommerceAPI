@@ -23,6 +23,9 @@ public class Receta {
 
     private String descripcion;
 
+    @Lob
+    private String imagen;
+
     @Column(nullable = false)
     private Double precioReceta;
 
