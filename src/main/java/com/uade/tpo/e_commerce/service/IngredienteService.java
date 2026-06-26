@@ -17,10 +17,10 @@ import com.uade.tpo.e_commerce.exception.IngredienteNotFoundException;
 @Service
 @Transactional
 public class IngredienteService {
- 
+
     @Autowired
     private IngredienteRepository ingredienteRepository;
-    
+
     public List<IngredienteDTO> getAllIngredientes() {
         return ingredienteRepository.findAll()
                 .stream()
@@ -28,8 +28,8 @@ public class IngredienteService {
                         i.getIdIngrediente(),
                         i.getNombre(),
                         i.getDescripcion(),
-                        i.getStock()
-                ))
+                        i.getStock(),
+                        i.getPrecio()))
                 .collect(Collectors.toList());
     }
 
@@ -38,15 +38,15 @@ public class IngredienteService {
 
         if (ingrediente == null) {
             throw new IngredienteNotFoundException(id);
-            
+
         }
 
         return new IngredienteDTO(
                 ingrediente.getIdIngrediente(),
                 ingrediente.getNombre(),
                 ingrediente.getDescripcion(),
-                ingrediente.getStock()
-        );
+                ingrediente.getStock(),
+                ingrediente.getPrecio());
     }
 
     public void deleteIngredienteById(Long id) {
@@ -57,39 +57,35 @@ public class IngredienteService {
     }
 
     public IngredienteDTO createIngrediente(IngredienteSaveDTO dto) {
-
         Ingrediente ingrediente = Ingrediente.builder()
                 .nombre(dto.getNombre())
                 .descripcion(dto.getDescripcion())
+                .precio(dto.getPrecio()) 
+                .stock(dto.getStock()) 
                 .build();
-
-        Ingrediente ingredienteGuardado = ingredienteRepository.save(ingrediente);
-
+        Ingrediente guardado = ingredienteRepository.save(ingrediente);
         return new IngredienteDTO(
-                ingredienteGuardado.getIdIngrediente(),
-                ingredienteGuardado.getNombre(),
-                ingredienteGuardado.getDescripcion()
-        );
+                guardado.getIdIngrediente(),
+                guardado.getNombre(),
+                guardado.getDescripcion(),
+                guardado.getStock(),
+                guardado.getPrecio());
     }
 
     public IngredienteDTO updateIngrediente(Long id, IngredienteSaveDTO dto) {
-        Ingrediente ingrediente = ingredienteRepository.findById(id).orElse(null);
-
-        if (ingrediente == null) {
-            throw new IngredienteNotFoundException(id);
-        }
-
+        Ingrediente ingrediente = ingredienteRepository.findById(id)
+                .orElseThrow(() -> new IngredienteNotFoundException(id));
         ingrediente.setNombre(dto.getNombre());
         ingrediente.setDescripcion(dto.getDescripcion());
-
+        ingrediente.setPrecio(dto.getPrecio());
+        ingrediente.setStock(dto.getStock()); 
         Ingrediente actualizado = ingredienteRepository.save(ingrediente);
-
         return new IngredienteDTO(
                 actualizado.getIdIngrediente(),
                 actualizado.getNombre(),
                 actualizado.getDescripcion(),
-                actualizado.getStock()
-        );
+                actualizado.getStock(),
+                actualizado.getPrecio()); 
     }
 
     public IngredienteDTO updateStock(Long id, Integer stock) {
@@ -103,7 +99,7 @@ public class IngredienteService {
                 actualizado.getIdIngrediente(),
                 actualizado.getNombre(),
                 actualizado.getDescripcion(),
-                actualizado.getStock()
-        );
+                actualizado.getStock(),
+                actualizado.getPrecio());
     }
 }

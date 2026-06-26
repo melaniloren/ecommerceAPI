@@ -1,15 +1,13 @@
 package com.uade.tpo.e_commerce.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor 
 public class IngredienteSaveDTO {
     private String nombre;
     private String descripcion;
-
-    public IngredienteSaveDTO(String nombre, String descripcion) {
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-    }
-
+    private Double precio;
+    private Integer stock;
 }
