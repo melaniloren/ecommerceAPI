@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.uade.tpo.e_commerce.dto.PedidoDTO;
 import com.uade.tpo.e_commerce.dto.PedidoRequestDTO;
+import com.uade.tpo.e_commerce.exception.EmailNotFoundException;
 import com.uade.tpo.e_commerce.exception.PedidoNotFoundException;
 import com.uade.tpo.e_commerce.model.Pedido;
 import com.uade.tpo.e_commerce.model.Usuario;
@@ -20,7 +21,7 @@ import jakarta.transaction.Transactional;
 @Service
 @Transactional
 public class PedidoService {
- 
+
     // private Long getCurrentUserId() {
     //     return ((Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getIdUsuario();
     // }
@@ -74,7 +75,7 @@ private Usuario getUsuarioAutenticado() {
         Pedido pedido = pedidoRepository.findById(id).orElse(null);
 
         if (pedido == null) {
-           throw new PedidoNotFoundException(id);
+        throw new PedidoNotFoundException(id);
         }
 
         PedidoDTO pedidoDTO = new PedidoDTO(
@@ -130,4 +131,20 @@ private Usuario getUsuarioAutenticado() {
                 pedidoActualizado.getTotal(),
                 pedidoActualizado.getUsuario() != null ? pedidoActualizado.getUsuario().getIdUsuario() : null);
     }
+
+    public List<PedidoDTO> getPedidosByEmail(String email) {
+    Usuario usuario = usuarioRepository.findByEmail(email)
+            .orElseThrow(() -> new EmailNotFoundException(email));
+
+    return pedidoRepository.findByUsuario_IdUsuario(usuario.getIdUsuario())
+            .stream()
+            .map(p -> new PedidoDTO(
+                    p.getIdPedido(),
+                    p.getFecha(),
+                    p.getTotal(),
+                    p.getUsuario() != null ? p.getUsuario().getIdUsuario() : null))
+            .collect(Collectors.toList());
 }
+}
+
+

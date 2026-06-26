@@ -93,6 +93,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PATCH, "/api/carritos/**").authenticated()
                         .requestMatchers(HttpMethod.DELETE, "/api/carritos/**").authenticated()
 
+                        // FAVORITOS (usuario autenticado)
+                        .requestMatchers(HttpMethod.GET,    "/api/favoritos").authenticated()
+                        .requestMatchers(HttpMethod.POST,   "/api/favoritos/**").authenticated()
+                        .requestMatchers(HttpMethod.DELETE, "/api/favoritos/**").authenticated()
+                        .requestMatchers(HttpMethod.GET,    "/api/pedidos/mis-pedidos").authenticated()
+
                         // POST
                         .requestMatchers(HttpMethod.POST, "/api/recetas")
                             .hasRole(Rol.ADMIN.name())
